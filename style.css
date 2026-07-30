@@ -1,0 +1,843 @@
+/* ====================================================================
+   TOKEN DESAIN — BLUE SPLASH LIQUID GLASS
+   ==================================================================== */
+:root {
+  --bg: #fbfcff;
+  --ink: #0b0d17;
+  --ink-dim: #6b7280;
+
+  --blue: #2451ff;
+  --blue-deep: #1531b8;
+  --blue-mid: #6f93ff;
+  --blue-pale: #eaf0ff;
+  --blue-line: rgba(36, 81, 255, 0.22);
+
+  --surface: rgba(255, 255, 255, 0.22);
+  --surface-strong: rgba(255, 255, 255, 0.4);
+  --shadow: rgba(20, 30, 90, 0.22);
+
+  --font-display: "Unbounded", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  --radius-lg: 28px;
+  --radius-md: 20px;
+  --nav-h: 68px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  position: relative;
+  padding-bottom: calc(var(--nav-h) + 16px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001s !important; animation-iteration-count: 1 !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ====================================================================
+   BACKGROUND FOTO
+   Ganti url('background.jpg') di HTML (attribute style pada .bg-photo)
+   dengan foto kamu sendiri. Overlay biru transparan di atasnya biar teks
+   tetap kebaca di foto apapun.
+   ==================================================================== */
+.bg-photo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.8) 60%, #fff 100%);
+}
+
+/* ====================================================================
+   LATAR SPLASH BIRU + HALFTONE
+   ==================================================================== */
+.blob-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(65px) url(#liquid-distort);
+  will-change: transform;
+}
+
+.blob--deep {
+  width: 60vmax; height: 60vmax;
+  top: -22vmax; right: -20vmax;
+  background: radial-gradient(circle at 35% 35%, var(--blue), transparent 68%);
+  opacity: 0.5;
+  animation: drift-a 26s ease-in-out infinite;
+}
+
+.blob--mid {
+  width: 40vmax; height: 40vmax;
+  top: 10vh; left: -14vmax;
+  background: radial-gradient(circle at 50% 50%, var(--blue-mid), transparent 70%);
+  opacity: 0.35;
+  animation: drift-b 30s ease-in-out infinite;
+}
+
+@keyframes drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-5vw, 6vh) scale(1.08); }
+}
+@keyframes drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6vw, -4vh) scale(1.06); }
+}
+
+.halftone {
+  position: absolute;
+  top: -5vh; right: -5vw;
+  width: 70vmax; height: 70vmax;
+  opacity: 0.16;
+  background-image: radial-gradient(var(--blue-deep) 1.4px, transparent 1.4px);
+  background-size: 14px 14px;
+  -webkit-mask-image: radial-gradient(circle at 60% 30%, black 0%, transparent 60%);
+  mask-image: radial-gradient(circle at 60% 30%, black 0%, transparent 60%);
+}
+
+/* ====================================================================
+   NAV — bottom tab bar (HP) / top floating pill (desktop)
+   ==================================================================== */
+.appnav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 20;
+  height: var(--nav-h);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: var(--surface-strong);
+  backdrop-filter: blur(9px) saturate(160%);
+  -webkit-backdrop-filter: blur(9px) saturate(160%);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 -8px 30px var(--shadow);
+}
+
+/* Bulatan lensa yang ngikutin cursor — efek dock ala iOS/macOS.
+   Distorsinya beneran (backdrop-filter + glass-lens-strong), pinggirnya
+   dikasih cincin tipis warna-warni (chromatic aberration) biar mirip kaca
+   asli. Nggak muncul di HP karena di sana nggak ada cursor. */
+.nav-lens {
+  position: absolute;
+  border-radius: 18px;
+  pointer-events: none;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    0 4px 14px rgba(20, 30, 90, 0.12);
+  transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 820px) {
+  .nav-lens { border-radius: 999px; }
+}
+
+.appnav__item {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-decoration: none;
+  color: var(--ink-dim);
+  font-size: 0.68rem;
+  font-weight: 600;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.appnav__item svg { width: 22px; height: 22px; }
+
+.appnav__item.is-active { color: var(--blue); transform: translateY(-2px); }
+
+@media (min-width: 820px) {
+  body { padding-bottom: 0; }
+
+  .appnav {
+    position: fixed;
+    top: 20px; bottom: auto;
+    left: 50%; transform: translateX(-50%);
+    width: max-content;
+    height: auto;
+    gap: 6px;
+    padding: 8px;
+    border-radius: 999px;
+    border: 1px solid var(--blue-line);
+    box-shadow: 0 12px 40px var(--shadow);
+  }
+
+  .appnav__item {
+    flex-direction: row;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+  }
+
+  .appnav__item svg { width: 18px; height: 18px; }
+
+  .appnav__item.is-active { transform: none; }
+}
+
+/* ====================================================================
+   HERO
+   ==================================================================== */
+.hero {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+  padding: 8vh 4vw 5vh;
+  max-width: 1680px;
+  margin: 0 auto;
+}
+
+.hero__intro {
+  min-height: 52vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--blue);
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.hero__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 6vh;
+}
+
+.chip--ghost {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue-deep);
+  background: var(--blue-pale);
+  border: 1px solid var(--blue-line);
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: start;
+  text-align: center;
+}
+
+@media (min-width: 860px) {
+  .hero__grid {
+    grid-template-columns: 1.1fr 0.9fr;
+    text-align: left;
+  }
+  .hero__photo-wrap { margin-top: 2vh; }
+}
+
+.hero__name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  margin: 0 0 1rem;
+  display: grid;
+  gap: 0.2rem;
+  text-align: left;
+}
+
+.hero__subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+.hero__title {
+  font-size: clamp(6rem, 14vw, 10rem);
+  line-height: 0.92;
+  letter-spacing: 0.05em;
+  color: var(--blue);
+  margin: 0;
+}
+
+.hero__role {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  color: var(--blue);
+  margin: 0 0 1rem;
+}
+
+.highlight {
+  display: inline-block;
+  background: var(--blue-pale);
+  border: 1.5px solid var(--blue-line);
+  color: var(--blue);
+  border-radius: 14px;
+  padding: 0 0.3em;
+}
+
+.highlight--sm {
+  border-radius: 8px;
+  padding: 0 0.25em;
+  font-weight: 700;
+}
+
+.hero__tagline {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--ink-dim);
+  max-width: 42ch;
+  margin: 0 0 2.2rem;
+}
+
+@media (min-width: 860px) {
+  .hero__text > * { margin-left: 0; margin-right: 0; }
+}
+
+.scroll-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+  box-shadow: 0 14px 30px var(--blue-line);
+  transition: transform 0.25s ease;
+}
+.scroll-tag:hover { transform: translateY(-2px); }
+.scroll-tag svg { width: 16px; height: 16px; }
+
+/* ---------- Foto hero ---------- */
+.hero__photo-wrap {
+  position: relative;
+  width: min(80%, 320px);
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+}
+
+@media (min-width: 860px) { .hero__photo-wrap { width: min(100%, 340px); } }
+@media (min-width: 1300px) { .hero__photo-wrap { width: min(100%, 420px); } }
+
+.hero__ring {
+  position: absolute;
+  inset: -18px;
+  border: 1.5px dashed var(--blue-line);
+  border-radius: 50%;
+  animation: spin 26s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.hero__photo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--blue-pale), #fff);
+  border: 1px solid var(--blue-line);
+  box-shadow: 0 20px 45px var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__photo-placeholder {
+  width: 40%;
+  height: 40%;
+  color: var(--blue-mid);
+}
+
+.hero__badge {
+  position: absolute;
+  right: -6%;
+  bottom: -6%;
+  width: 34%;
+  aspect-ratio: 1 / 1;
+  min-width: 76px;
+  border-radius: 50%;
+  background: var(--surface-strong);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--blue-line);
+  box-shadow: 0 10px 26px var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__badge svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--blue-deep);
+  animation: spin 18s linear infinite;
+}
+
+.hero__badge-core {
+  color: var(--blue);
+  font-size: 1.1rem;
+}
+
+/* ====================================================================
+   SKILL & KEAHLIAN
+   ==================================================================== */
+.skill {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+  padding: 4vh 0 0;
+}
+
+.skill__head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  margin: 0 0 0.6rem;
+}
+
+.skill__head p {
+  color: var(--ink-dim);
+  margin: 0 0 2.2rem;
+  line-height: 1.6;
+}
+
+.skill__list {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+@media (max-width: 640px) {
+  .skill__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.skill__card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  text-align: center;
+  overflow: hidden;
+  background: var(--surface);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 34px var(--shadow);
+  --mx: 50%;
+  --my: 50%;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+.skill__card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 22px 44px var(--shadow);
+  backdrop-filter: blur(6px) saturate(180%);
+  -webkit-backdrop-filter: blur(6px) saturate(180%);
+}
+
+.skill__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 45%);
+  pointer-events: none;
+}
+
+.skill__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(160px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.45), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.skill__card:hover::after { opacity: 1; }
+
+.skill__card > * { position: relative; z-index: 1; }
+
+.skill__name {
+  font-size: 0.66rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.skill__percent {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin: 0;
+}
+
+.app-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.app-badge img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  background: transparent;
+  padding: 0;
+  border-radius: 16px;
+}
+
+/* ====================================================================
+   KARYA — satu section per kategori, isinya scroll horizontal
+   ==================================================================== */
+#karya {
+  position: relative;
+  z-index: 2;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 4vh 0 2vh;
+}
+
+.karya__intro {
+  padding: 0 4vw 2vh;
+  max-width: 720px;
+}
+
+.karya__intro h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  margin: 0.4rem 0 0.7rem;
+}
+
+.karya__intro p:last-child {
+  color: var(--ink-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.category-row {
+  padding: 3vh 4vw 4vh;
+}
+
+.category-row__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1.5px solid var(--blue-line);
+}
+
+.category-row__head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  margin: 0;
+}
+
+.category-row__count {
+  font-size: 0.85rem;
+  color: var(--ink-dim);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.store-group + .store-group {
+  margin-top: 1rem;
+}
+
+.store-group__title {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 0.2rem;
+  padding-left: 4px;
+}
+
+.scroll-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 22px 24px 48px;
+  scroll-padding-left: 4vw;
+}
+
+.scroll-row::-webkit-scrollbar { height: 6px; }
+.scroll-row::-webkit-scrollbar-thumb {
+  background: var(--blue-line);
+  border-radius: 999px;
+}
+
+/* ---------- Kartu karya ----------
+   Tinggi kartu DIBIKIN SAMA untuk semua (--media-h), lebarnya otomatis
+   menyesuaikan aspect-ratio masing-masing (diatur inline per kartu di HTML).
+   Hasilnya: kartu landscape jadi lebih lebar, kartu portrait jadi lebih
+   ramping — tapi semua tetap sejajar/rata tingginya. */
+:root { --media-h: clamp(200px, 34vw, 300px); }
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  max-width: 80vw;
+  overflow: hidden;
+  background: var(--surface);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius-lg);
+  padding: 0.6rem;
+  box-shadow: 0 16px 15px var(--shadow);
+  --mx: 50%;
+  --my: 50%;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 10px 15 px var(--shadow);
+  backdrop-filter: blur(6px) saturate(180%);
+  -webkit-backdrop-filter: blur(6px) saturate(180%);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 45%);
+  pointer-events: none;
+}
+
+/* Spotlight yang ngikutin posisi cursor (--mx / --my diset lewat JS) */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: inherit;
+  background: radial-gradient(220px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.45), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card:hover::after { opacity: 1; }
+
+.card__media {
+  position: relative;
+  height: var(--media-h);
+  width: auto;
+  max-width: 74vw;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--blue-pale);
+  isolation: isolate;
+  transform: translateZ(0);
+  /* aspect-ratio diatur langsung lewat inline style per kartu di HTML —
+     itu yang menentukan lebar akhir kartu (tinggi selalu sama). */
+}
+
+.card__media iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  transform: translateZ(0);
+}
+
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Penutup kosmetik tombol "buka di Drive" yang muncul di pojok kanan atas
+   preview video Drive. Ini cuma akal-akalan visual (nutup, bukan menghapus
+   beneran) karena kontennya cross-origin — lihat catatan di index.html. */
+
+.card__body {
+  display: block;
+  margin-top: 0.5rem;
+  padding: 0.7rem 0.7rem 0.6rem;
+  border-radius: calc(var(--radius-md) - 6px);
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--ink);
+}
+
+.card__body h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.2rem;
+  line-height: 1.3;
+}
+
+.card__body p {
+  font-size: 0.8rem;
+  color: var(--ink-dim);
+  margin: 0;
+}
+
+/* ====================================================================
+   FOOTER / KONTAK
+   ==================================================================== */
+.glasscard {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 34px var(--shadow);
+}
+
+.glasscard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 50%);
+  pointer-events: none;
+}
+
+.glasscard > * { position: relative; z-index: 1; }
+
+.footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 4vh 6vw 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer__banner {
+  padding: clamp(2.2rem, 5vw, 3.4rem);
+  margin-bottom: 2.4rem;
+}
+
+.footer__banner h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  margin: 0 0 0.8rem;
+}
+
+.footer__banner p {
+  color: var(--ink-dim);
+  line-height: 1.6;
+  margin: 0 auto 1.6rem;
+  max-width: 46ch;
+}
+
+.footer__handle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--blue);
+  margin: 0 0 0.4rem;
+}
+
+.footer__mail {
+  display: inline-block;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--blue-line);
+  margin-bottom: 0.8rem;
+}
+
+.footer__copy {
+  color: var(--ink-dim);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* ====================================================================
+   FOCUS STATE (AKSESIBILITAS)
+   ==================================================================== */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
