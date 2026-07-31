@@ -252,7 +252,7 @@
           </div>
 
           <div class="card">
-            <div class="card__media" style="aspect-ratio: 4 / 5" data-gdrive="https://drive.google.com/file/d/CONTOH-GANTI-LINK-2/view"></div>
+            <div class="card__media" style="aspect-ratio: 4 / 5" data-gdrive="https://drive.google.com/file/d/1eYXhjDn2nQ-z5-9LGNRh3uokK3l96g4C/view?usp=drive_link"></div>
             <div class="card__body">
               <h3>UI Dashboard App</h3>
               <p>oleh Nama Kamu</p>
@@ -260,7 +260,7 @@
           </div>
 
           <div class="card">
-            <div class="card__media" style="aspect-ratio: 4 / 5" data-gdrive="https://drive.google.com/file/d/CONTOH-GANTI-LINK-3/view"></div>
+            <div class="card__media" style="aspect-ratio: 9 / 16" data-gdrive="https://drive.google.com/file/d/19P-qnUQBgXRT3H5hzgW1WN31QHAr2W5-/view?usp=drive_link"></div>
             <div class="card__body">
               <h3>Branding Kit</h3>
               <p>oleh Nama Kamu</p>
@@ -294,7 +294,7 @@
         </div>
 
         <div class="card">
-          <div class="card__media" style="aspect-ratio: 9 / 16" data-gdrive="https://drive.google.com/file/d/CONTOH-GANTI-LINK-5/view"></div>
+          <div class="card__media" style="aspect-ratio: 9 / 16" data-gdrive="https://drive.google.com/file/d/1DLk7bxBhDGfRmPIIU709y9DYiPFyp8CE/view?usp=drive_link"></div>
           <div class="card__body">
             <h3>Reel Showcase 2025</h3>
             <p>oleh Nama Kamu</p>
@@ -373,6 +373,7 @@
         const meta = data.imageMediaMetadata || data.videoMediaMetadata;
         if (meta?.width && meta?.height) {
           mediaEl.style.aspectRatio = `${meta.width} / ${meta.height}`;
+          markPortrait(mediaEl);
         }
       } catch (err) {
         // biarkan, fallback ke aspect-ratio manual
@@ -385,6 +386,20 @@
     function toThumbnailLink(id) {
       return `https://drive.google.com/thumbnail?id=${id}&sz=w1600`;
     }
+
+    // Tandai kartu potret/vertikal (9:16, dsb) biar dapat batas ukuran
+    // (max-height/max-width) yang beda dari kartu landscape/kotak — lihat
+    // .card__media.is-portrait di style.css. Dibaca dari aspect-ratio yang
+    // sedang aktif di kartu itu (baik yang diset manual di HTML, maupun
+    // yang ditimpa otomatis oleh applyAutoRatio kalau GOOGLE_API_KEY diisi).
+    function markPortrait(media) {
+      const ratioStr = media.style.aspectRatio;
+      if (!ratioStr) return;
+      const parts = ratioStr.split("/").map(n => parseFloat(n));
+      const isPortrait = parts.length === 2 && parts[0] / parts[1] < 1;
+      media.classList.toggle("is-portrait", isPortrait);
+    }
+    document.querySelectorAll(".card__media").forEach(markPortrait);
 
     // Pasang media ke tiap .card__media yang punya data-gdrive
     document.querySelectorAll(".card__media[data-gdrive]").forEach(media => {
@@ -436,16 +451,29 @@
     function moveNavLens() {
       const active = appnav.querySelector(".appnav__item.is-active");
       if (!active) return;
-      const navRect = appnav.getBoundingClientRect();
+      const navRect  = appnav.getBoundingClientRect();
       const itemRect = active.getBoundingClientRect();
-      navLens.style.width = `${itemRect.width}px`;
-      navLens.style.height = `${itemRect.height}px`;
-      navLens.style.left = `${itemRect.left - navRect.left}px`;
-      navLens.style.top = `${itemRect.top - navRect.top}px`;
+      const isMobile = window.innerWidth < 820;
+
+      if (isMobile) {
+        // Ukur item secara langsung, lalu kurangi sedikit padding
+        const padX = 0;   // horizontal: pas sama item
+        const padY = 5;   // vertical: 5px dari atas-bawah nav
+        navLens.style.left   = `${itemRect.left - navRect.left - padX}px`;
+        navLens.style.top    = `${padY}px`;
+        navLens.style.width  = `${itemRect.width + padX * 2}px`;
+        navLens.style.height = `${itemRect.height}px`;
+      } else {
+        navLens.style.width  = `${itemRect.width}px`;
+        navLens.style.height = `${itemRect.height}px`;
+        navLens.style.left   = `${itemRect.left - navRect.left}px`;
+        navLens.style.top    = `${itemRect.top  - navRect.top}px`;
+      }
     }
 
     window.addEventListener("resize", moveNavLens);
-    window.addEventListener("load", moveNavLens);
+    window.addEventListener("load", () => { setTimeout(moveNavLens, 100); });
+    window.addEventListener("resize", moveNavLens);
     moveNavLens();
 
     // ============================================================
