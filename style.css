@@ -1,5 +1,4 @@
-/* ====================================================================
-   TOKEN DESAIN — BLUE SPLASH LIQUID GLASS
+ TOKEN DESAIN — BLUE SPLASH LIQUID GLASS
    ==================================================================== */
 :root {
   --bg: #fbfcff;
@@ -22,9 +21,18 @@
   --radius-lg: 28px;
   --radius-md: 20px;
   --nav-h: 68px;
+
+  --media-h: clamp(200px, 34vw, 300px);
+
+  /* Glass effect vars — dikurangi di mobile lewat media query */
+  --glass-blur: blur(10px) saturate(160%);
+  --glass-shadow: 0 16px 34px var(--shadow);
 }
 
-* { box-sizing: border-box; }
+/* ====================================================================
+   RESET & BASE
+   ==================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
 body {
@@ -38,15 +46,16 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.001s !important; animation-iteration-count: 1 !important; }
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+  }
   html { scroll-behavior: auto; }
 }
 
 /* ====================================================================
    BACKGROUND FOTO
-   Ganti url('background.jpg') di HTML (attribute style pada .bg-photo)
-   dengan foto kamu sendiri. Overlay biru transparan di atasnya biar teks
-   tetap kebaca di foto apapun.
    ==================================================================== */
 .bg-photo {
   position: fixed;
@@ -62,11 +71,17 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.8) 60%, #fff 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.8) 60%,
+    #fff 100%
+  );
 }
 
 /* ====================================================================
    LATAR SPLASH BIRU + HALFTONE
+   (animasi dinonaktifkan di mobile untuk hemat baterai & GPU)
    ==================================================================== */
 .blob-field {
   position: fixed;
@@ -80,7 +95,8 @@ body {
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(65px) url(#liquid-distort);
+  /* blur besar + distort hanya di desktop */
+  filter: blur(65px);
   will-change: transform;
 }
 
@@ -102,11 +118,11 @@ body {
 
 @keyframes drift-a {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-5vw, 6vh) scale(1.08); }
+  50%       { transform: translate(-5vw, 6vh) scale(1.08); }
 }
 @keyframes drift-b {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(6vw, -4vh) scale(1.06); }
+  50%       { transform: translate(6vw, -4vh) scale(1.06); }
 }
 
 .halftone {
@@ -121,47 +137,66 @@ body {
 }
 
 /* ====================================================================
-   NAV — bottom tab bar (HP) / top floating pill (desktop)
+   NAV — floating pill (mobile & desktop)
    ==================================================================== */
+
+/* ── Mobile: pill floating di tengah bawah ── */
 .appnav {
   position: fixed;
-  left: 0; right: 0; bottom: 0;
+  /* Pill center-bottom */
+  left: 50%;
+  right: auto;
+  bottom: 0.75rem;
+  transform: translateX(-50%);
   z-index: 20;
-  height: var(--nav-h);
+  width: max-content;
+  height: auto;
+  padding: 0.35rem 0.5rem;
+  gap: 0;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: var(--surface-strong);
-  backdrop-filter: blur(9px) saturate(160%);
-  -webkit-backdrop-filter: blur(9px) saturate(160%);
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 -8px 30px var(--shadow);
+
+  /* Pill shape */
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+
+  /* Glass — lebih ringan di mobile */
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  box-shadow:
+    0 8px 28px rgba(20, 30, 90, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-/* Bulatan lensa yang ngikutin cursor — efek dock ala iOS/macOS.
-   Distorsinya beneran (backdrop-filter + glass-lens-strong), pinggirnya
-   dikasih cincin tipis warna-warni (chromatic aberration) biar mirip kaca
-   asli. Nggak muncul di HP karena di sana nggak ada cursor. */
+/* Safe area iPhone */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .appnav {
+    bottom: calc(0.6rem + env(safe-area-inset-bottom));
+  }
+  body {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Pill indicator yang slide antar tab (diposisikan oleh JS) */
 .nav-lens {
   position: absolute;
-  border-radius: 18px;
+  border-radius: 999px;
   pointer-events: none;
   z-index: 5;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px) saturate(160%);
   -webkit-backdrop-filter: blur(10px) saturate(160%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
-    0 4px 14px rgba(20, 30, 90, 0.12);
-  transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@media (min-width: 820px) {
-  .nav-lens { border-radius: 999px; }
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 2px 10px rgba(20, 30, 90, 0.1);
+  transition:
+    left   0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    top    0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    width  0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .appnav__item {
@@ -170,43 +205,55 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
   text-decoration: none;
   color: var(--ink-dim);
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 600;
-  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  text-align: center;
+  align-self: center;
+  min-width: 60px;
+  transition: color 0.2s ease;
 }
 
-.appnav__item svg { width: 22px; height: 22px; }
+.appnav__item svg { width: 18px; height: 18px; }
 
-.appnav__item.is-active { color: var(--blue); transform: translateY(-2px); }
+.appnav__item.is-active     { color: var(--blue); transform: none; }
+.appnav__item:not(.is-active) { color: var(--ink-dim); }
 
+/* ── Desktop: floating pill di atas tengah ── */
 @media (min-width: 820px) {
   body { padding-bottom: 0; }
 
   .appnav {
-    position: fixed;
-    top: 20px; bottom: auto;
-    left: 50%; transform: translateX(-50%);
+    top: 20px;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
     width: max-content;
-    height: auto;
-    gap: 6px;
     padding: 8px;
-    border-radius: 999px;
+    gap: 6px;
     border: 1px solid var(--blue-line);
+    background: var(--surface-strong);
+    backdrop-filter: blur(9px) saturate(160%);
+    -webkit-backdrop-filter: blur(9px) saturate(160%);
     box-shadow: 0 12px 40px var(--shadow);
   }
+
+  .nav-lens { border-radius: 999px; }
 
   .appnav__item {
     flex-direction: row;
     padding: 10px 18px;
-    border-radius: 999px;
     font-size: 0.85rem;
+    min-width: unset;
+    text-align: left;
   }
 
   .appnav__item svg { width: 18px; height: 18px; }
-
   .appnav__item.is-active { transform: none; }
 }
 
@@ -352,7 +399,7 @@ body {
 .scroll-tag:hover { transform: translateY(-2px); }
 .scroll-tag svg { width: 16px; height: 16px; }
 
-/* ---------- Foto hero ---------- */
+/* ── Foto hero ── */
 .hero__photo-wrap {
   position: relative;
   width: min(80%, 320px);
@@ -360,7 +407,7 @@ body {
   aspect-ratio: 1 / 1;
 }
 
-@media (min-width: 860px) { .hero__photo-wrap { width: min(100%, 340px); } }
+@media (min-width: 860px)  { .hero__photo-wrap { width: min(100%, 340px); } }
 @media (min-width: 1300px) { .hero__photo-wrap { width: min(100%, 420px); } }
 
 .hero__ring {
@@ -411,11 +458,13 @@ body {
   border-radius: 50%;
   background: var(--surface-strong);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--blue-line);
   box-shadow: 0 10px 26px var(--shadow);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
 }
 
 .hero__badge svg {
@@ -430,6 +479,9 @@ body {
 .hero__badge-core {
   color: var(--blue);
   font-size: 1.1rem;
+  position: relative;
+  z-index: 2;
+  line-height: 1;
 }
 
 /* ====================================================================
@@ -465,6 +517,7 @@ body {
   .skill__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+/* ── Glass card skill ── */
 .skill__card {
   position: relative;
   aspect-ratio: 1 / 1;
@@ -476,24 +529,21 @@ body {
   padding: 0.5rem;
   text-align: center;
   overflow: hidden;
+
+  /* Glass */
   background: var(--surface);
-  backdrop-filter: blur(8px) saturate(150%);
-  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: var(--radius-lg);
-  box-shadow: 0 16px 34px var(--shadow);
+  box-shadow: var(--glass-shadow);
+
   --mx: 50%;
   --my: 50%;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.skill__card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 22px 44px var(--shadow);
-  backdrop-filter: blur(6px) saturate(180%);
-  -webkit-backdrop-filter: blur(6px) saturate(180%);
-}
-
+/* Shimmer highlight atas-kiri */
 .skill__card::before {
   content: "";
   position: absolute;
@@ -504,19 +554,30 @@ body {
   pointer-events: none;
 }
 
+/* Spotlight ngikutin cursor (hanya desktop) */
 .skill__card::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  background: radial-gradient(160px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.45), transparent 60%);
+  background: radial-gradient(
+    160px circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.45),
+    transparent 60%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-.skill__card:hover::after { opacity: 1; }
+@media (hover: hover) {
+  .skill__card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 22px 44px var(--shadow);
+  }
+  .skill__card:hover::after { opacity: 1; }
+}
 
 .skill__card > * { position: relative; z-index: 1; }
 
@@ -556,12 +617,11 @@ body {
   object-position: center;
   display: block;
   background: transparent;
-  padding: 0;
   border-radius: 16px;
 }
 
 /* ====================================================================
-   KARYA — satu section per kategori, isinya scroll horizontal
+   KARYA — scroll horizontal per kategori
    ==================================================================== */
 #karya {
   position: relative;
@@ -621,9 +681,7 @@ body {
   white-space: nowrap;
 }
 
-.store-group + .store-group {
-  margin-top: 1rem;
-}
+.store-group + .store-group { margin-top: 1rem; }
 
 .store-group__title {
   font-family: var(--font-body);
@@ -639,6 +697,7 @@ body {
   align-items: stretch;
   gap: 1.1rem;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
   padding: 22px 24px 48px;
   scroll-padding-left: 4vw;
@@ -650,11 +709,7 @@ body {
   border-radius: 999px;
 }
 
-/* ---------- Kartu karya ----------
-   Tinggi kartu DIBIKIN SAMA untuk semua (--media-h), lebarnya otomatis
-   menyesuaikan aspect-ratio masing-masing (diatur inline per kartu di HTML).
-   Hasilnya: kartu landscape jadi lebih lebar, kartu portrait jadi lebih
-   ramping — tapi semua tetap sejajar/rata tingginya. */
+/* ── Kartu karya ── */
 :root { --media-h: clamp(200px, 34vw, 300px); }
 
 .card {
@@ -666,25 +721,22 @@ body {
   width: min-content;
   max-width: none;
   overflow: hidden;
+
+  /* Glass */
   background: var(--surface);
-  backdrop-filter: blur(8px) saturate(150%);
-  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: var(--radius-lg);
   padding: 0.6rem;
-  box-shadow: 0 16px 15px var(--shadow);
+  box-shadow: var(--glass-shadow);
+
   --mx: 50%;
   --my: 50%;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 10px 15 px var(--shadow);
-  backdrop-filter: blur(6px) saturate(180%);
-  -webkit-backdrop-filter: blur(6px) saturate(180%);
-}
-
+/* Glass shimmer */
 .card::before {
   content: "";
   position: absolute;
@@ -695,20 +747,30 @@ body {
   pointer-events: none;
 }
 
-/* Spotlight yang ngikutin posisi cursor (--mx / --my diset lewat JS) */
+/* Spotlight cursor (hanya desktop, hover device) */
 .card::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 4;
   border-radius: inherit;
-  background: radial-gradient(220px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.45), transparent 60%);
+  background: radial-gradient(
+    220px circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.45),
+    transparent 60%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-.card:hover::after { opacity: 1; }
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 24px 40px var(--shadow);
+  }
+  .card:hover::after { opacity: 1; }
+}
 
 .card__media {
   position: relative;
@@ -720,12 +782,10 @@ body {
   background: var(--blue-pale);
   isolation: isolate;
   transform: translateZ(0);
-  /* aspect-ratio diatur langsung lewat inline style per kartu di HTML —
-     itu yang menentukan lebar akhir kartu (tinggi selalu sama). */
 }
 
 .card__media iframe {
-  position: absolute; /* Kunci utamanya: keluarkan dari flow agar tidak merusak lebar kartu */
+  position: absolute;
   top: 0;
   left: 0;
   width: 300%;
@@ -736,11 +796,10 @@ body {
   transform-origin: top left;
 }
 
-/* Trik skala untuk iframe Drive pada video vertikal (9:16) agar UI tidak berantakan */
 .card__media.is-portrait iframe {
-  position: absolute; /* Kunci utamanya: keluarkan dari flow agar tidak merusak lebar kartu */
-  top: -20;
-  left: -20;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 300%;
   height: 300%;
   transform: scale(0.333333) translateZ(0);
@@ -753,10 +812,6 @@ body {
   object-fit: cover;
   display: block;
 }
-
-/* Penutup kosmetik tombol "buka di Drive" yang muncul di pojok kanan atas
-   preview video Drive. Ini cuma akal-akalan visual (nutup, bukan menghapus
-   beneran) karena kontennya cross-origin — lihat catatan di index.html. */
 
 .card__body {
   display: block;
@@ -790,11 +845,11 @@ body {
   position: relative;
   overflow: hidden;
   background: var(--surface);
-  backdrop-filter: blur(10px) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: var(--radius-lg);
-  box-shadow: 0 16px 34px var(--shadow);
+  box-shadow: var(--glass-shadow);
 }
 
 .glasscard::before {
@@ -859,7 +914,7 @@ body {
 }
 
 /* ====================================================================
-   FOCUS STATE (AKSESIBILITAS)
+   FOKUS (AKSESIBILITAS)
    ==================================================================== */
 a:focus-visible,
 button:focus-visible {
@@ -867,31 +922,56 @@ button:focus-visible {
   outline-offset: 3px;
 }
 /* ====================================================================
-   MOBILE LAYOUT BARU — Foto atas → Nama center → Skill kecil
-   Hanya berlaku di HP (max-width: 819px)
-   Desktop tetap SAMA seperti biasa
+   MOBILE — max-width: 819px
+   Satu blok konsolidasi, tidak ada !important, tidak ada tumpang tindih
    ==================================================================== */
-
 @media (max-width: 819px) {
 
-  /* ── HERO: ubah grid jadi column terbalik (foto dulu, baru teks) ── */
+  /* ── Token glass lebih ringan di mobile ── */
+  :root {
+    --glass-blur: blur(6px) saturate(140%);
+    --glass-shadow: 0 8px 20px var(--shadow);
+    --media-h: clamp(150px, 42vw, 220px);
+  }
+
+  /* Blob: kurangi opacity, hentikan animasi (boros GPU) */
+  .blob {
+    filter: blur(40px);
+    will-change: auto;
+    animation: none;
+    opacity: 0.2;
+  }
+
+  /* Halftone: sederhanakan */
+  .halftone { opacity: 0.08; }
+
+  /* ── HERO ── */
   .hero {
-    padding: 5vh 5vw 3vh;
+    padding: 3.5vh 5vw 3vh;
     gap: 0;
   }
 
+  .hero__intro { padding-top: 2vh; }
+
   .hero__top {
-    margin-bottom: 2vh;
-    justify-content: center;
-    gap: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    padding: 0;
+    gap: 0;
   }
 
   .chip--ghost {
-    font-size: 0.65rem;
-    padding: 0.35rem 0.75rem;
+    font-size: 0.6rem;
+    padding: 0.28rem 0.6rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
   }
 
-  /* Grid: foto dulu (order -1), lalu teks */
+  /* Grid hero: foto dulu, lalu teks */
   .hero__grid {
     display: flex;
     flex-direction: column;
@@ -900,31 +980,71 @@ button:focus-visible {
     text-align: center;
   }
 
-  /* ── FOTO: tampil PERTAMA, kecil, bulat, center ── */
+  /* ── FOTO: tampil pertama, kecil, bulat ── */
   .hero__photo-wrap {
     order: -1;
     width: 130px;
     height: 130px;
-    aspect-ratio: 1/1;
+    min-width: 130px;
+    min-height: 130px;
+    max-width: 130px;
+    max-height: 130px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
     margin: 0 auto 1.5rem;
     flex-shrink: 0;
+    align-self: center;
+    position: relative;
   }
 
   .hero__ring {
-    inset: -10px;
+    position: absolute;
+    top: -14px; left: -14px;
+    right: -14px; bottom: -14px;
+    width: auto; height: auto;
+    border-radius: 50%;
+    /* Ring masih berputar — ringan karena hanya CSS transform */
+    animation: spin 26s linear infinite;
   }
 
+  .hero__photo {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  /* Badge: tampilkan hanya ikon bintang, sembunyikan SVG teks melingkar */
   .hero__badge {
-    width: 38px;
-    height: 38px;
-    right: -4%;
-    bottom: -4%;
+    width: 48px; height: 48px;
+    min-width: 48px; min-height: 48px;
+    max-width: 48px; max-height: 48px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    right: -8px; bottom: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    position: absolute;
   }
 
-  .hero__badge svg { font-size: 5px; }
-  .hero__badge-core { font-size: 0.85rem; }
+  /* Sembunyikan SVG teks melingkar — terlalu kecil, jadi gepeng */
+  .hero__badge svg { display: none; }
 
-  /* ── TEKS HERO: semua center ── */
+  /* Ring animasi tipis di sekeliling badge */
+  .hero__badge::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1.5px dashed var(--blue-line);
+    animation: spin 14s linear infinite;
+  }
+
+  .hero__badge-core { font-size: 1.1rem; }
+
+  /* ── Teks hero ── */
   .hero__text {
     width: 100%;
     display: flex;
@@ -980,7 +1100,7 @@ button:focus-visible {
     margin: 0 auto 2rem;
   }
 
-  /* ── SKILL SECTION: kecil-kecil ── */
+  /* ── SKILL ── */
   .skill {
     width: 100%;
     padding: 0;
@@ -1004,85 +1124,52 @@ button:focus-visible {
     margin: 0 auto 1rem;
   }
 
-  /* Grid 3 kolom, card lebih compact */
   .skill__list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   .skill__card {
     border-radius: 16px;
     padding: 0.55rem 0.25rem 0.6rem;
     gap: 0.2rem;
-    aspect-ratio: 1 / 1;
   }
 
-  /* Icon app lebih kecil */
-  .app-badge {
-    width: 36px;
-    height: 36px;
-  }
+  .app-badge { width: 36px; height: 36px; }
+  .app-badge img { border-radius: 10px; width: 85%; height: 85%; }
 
-  .app-badge img {
-    border-radius: 10px;
-    width: 85%;
-    height: 85%;
-  }
+  .skill__name   { font-size: 0.55rem; line-height: 1.2; }
+  .skill__percent { font-size: 0.65rem; }
 
-  .skill__name {
-    font-size: 0.55rem;
-    line-height: 1.2;
-    font-weight: 600;
-  }
-
-  .skill__percent {
-    font-size: 0.65rem;
-    font-weight: 700;
-  }
-
-  /* ── KARYA SECTION ── */
-  #karya {
-    padding: 3vh 0 2vh;
-  }
+  /* ── KARYA ── */
+  #karya { padding: 3vh 0 2vh; }
 
   .karya__intro {
     padding: 0 5vw 1.5vh;
     text-align: center;
   }
 
-  .karya__intro h2 {
-    font-size: clamp(1.3rem, 5.5vw, 1.6rem);
-  }
+  .karya__intro h2 { font-size: clamp(1.3rem, 5.5vw, 1.6rem); }
+  .karya__intro p  { font-size: 0.85rem; }
 
-  .karya__intro p { font-size: 0.85rem; }
+  .category-row { padding: 2vh 5vw 3vh; }
 
-  .category-row {
-    padding: 2vh 5vw 3vh;
-  }
-
-  .category-row__head h2 {
-    font-size: clamp(1.1rem, 4.5vw, 1.4rem);
-  }
+  .category-row__head h2 { font-size: clamp(1.1rem, 4.5vw, 1.4rem); }
 
   .scroll-row {
     padding: 14px 5vw 32px;
     gap: 0.8rem;
   }
 
-  :root { --media-h: clamp(150px, 42vw, 220px); }
-
   .card {
-    max-width: none;
     padding: 0.45rem;
     border-radius: 20px;
   }
 
-  .card__body {
-    padding: 0.5rem 0.5rem 0.45rem;
-  }
-
-  .card__body h3 { font-size: 0.82rem; }
-  .card__body p  { font-size: 0.72rem; }
+  .card__body     { padding: 0.5rem 0.5rem 0.45rem; }
+  .card__body h3  { font-size: 0.82rem; }
+  .card__body p   { font-size: 0.72rem; }
 
   /* ── FOOTER ── */
   .footer {
@@ -1095,602 +1182,29 @@ button:focus-visible {
     margin-bottom: 1.4rem;
   }
 
-  .footer__banner h2 {
-    font-size: clamp(1.2rem, 5vw, 1.5rem);
-  }
+  .footer__banner h2 { font-size: clamp(1.2rem, 5vw, 1.5rem); }
+  .footer__banner p  { font-size: 0.85rem; }
 
-  .footer__banner p { font-size: 0.85rem; }
-
-  /* ── NAV BOTTOM ── */
-  .appnav {
-    padding: 0 3vw;
-  }
-
-  .appnav__item { font-size: 0.6rem; gap: 2px; }
-  .appnav__item svg { width: 20px; height: 20px; }
-
-  /* ── Safe area iPhone ── */
-  body { padding-bottom: calc(var(--nav-h) + 8px); }
+  /* Body padding bawah untuk pill nav */
+  body { padding-bottom: 4.5rem; }
 }
 
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  @media (max-width: 819px) {
-    body {
-      padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 4px);
-    }
-    .appnav {
-      padding-bottom: env(safe-area-inset-bottom);
-      height: calc(var(--nav-h) + env(safe-area-inset-bottom));
-    }
-  }
-}
-
-/* Untuk HP sangat kecil (< 380px) */
+/* ── HP sangat kecil (< 380px) ── */
 @media (max-width: 380px) {
-  .hero__title { font-size: clamp(3rem, 17vw, 4rem); }
-  .hero__photo-wrap { width: 110px; height: 110px; }
-  .app-badge { width: 30px; height: 30px; }
-  .skill__name { font-size: 0.5rem; }
-  .skill__percent { font-size: 0.6rem; }
-  .skill__card { border-radius: 14px; }
-}
-
-/* ====================================================================
-   FIX TAMBAHAN — Badge gepeng & chip pojok
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* ── Chip ➤➤➤ dan AVAILABLE FOR FREELANCE — tetap pojok, lebih kecil ── */
-  .hero__top {
-    display: flex;
-    justify-content: space-between;  /* kiri & kanan */
-    align-items: center;
-    width: 100%;
-    margin-bottom: 1.5rem;
-    padding: 0;
-    gap: 0;
-  }
-
-  .chip--ghost {
-    font-size: 0.6rem;
-    padding: 0.28rem 0.6rem;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-  }
-
-  /* ── Badge bulat "OPEN FOR PROJECTS" — fix gepeng ── */
-  .hero__badge {
-    /* Paksa bujur sangkar */
-    width: 46px  !important;
-    height: 46px !important;
-    min-width: unset;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    right: -6%;
-    bottom: -6%;
-    /* Pastikan tidak ikut distort */
-    flex-shrink: 0;
-    overflow: hidden;
-  }
-
-  /* SVG teks melingkar di dalam badge */
-  .hero__badge svg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    inset: 0;
-  }
-
-  .hero__badge-core {
-    font-size: 0.9rem;
-    position: relative;
-    z-index: 2;
-  }
-
-  /* ── Foto wrap — pastikan benar-benar bujur sangkar ── */
+  .hero__title      { font-size: clamp(3rem, 17vw, 4rem); }
   .hero__photo-wrap {
-    width: 130px  !important;
-    height: 130px !important;
-    aspect-ratio: 1 / 1 !important;
-    flex-shrink: 0;
-    position: relative;
+    width: 110px; height: 110px;
+    min-width: 110px; min-height: 110px;
+    max-width: 110px; max-height: 110px;
   }
-
-  /* Ring dashed — pastikan ikut bentuk bulat */
-  .hero__ring {
-    position: absolute;
-    inset: -12px;
-    border-radius: 50%;
-    width: auto;
-    height: auto;
-    aspect-ratio: 1 / 1;
-  }
-
-  /* Foto dalamnya — tetap bulat */
-  .hero__photo {
-    border-radius: 50%;
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 1 / 1;
-  }
-}
-
-/* HP sangat kecil */
-@media (max-width: 380px) {
-  .hero__photo-wrap {
-    width: 110px  !important;
-    height: 110px !important;
-  }
-
   .hero__badge {
-    width: 38px !important;
-    height: 38px !important;
+    width: 40px; height: 40px;
+    min-width: 40px; min-height: 40px;
+    max-width: 40px; max-height: 40px;
+    right: -6px; bottom: -6px;
   }
-}
-
-/* ====================================================================
-   FIX v2 — Chip jarak atas + Badge benar-benar bulat
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* ── Hero intro: kasih padding atas lebih ── */
-  .hero__intro {
-    padding-top: 2vh;
-  }
-
-  /* ── Chip row: geser ke atas dengan margin, jangan mepet foto ── */
-  .hero__top {
-    margin-top: 0;
-    margin-bottom: 2rem !important;   /* jarak bawah chip ke foto */
-    padding-top: 0.5rem;
-  }
-
-  /* ── BADGE FIX TOTAL: sembunyikan SVG teks melingkar yang susah bulat,
-        ganti dengan tampilan minimalis bintang saja ── */
-  .hero__badge {
-    width: 48px  !important;
-    height: 48px !important;
-    min-width: 48px;
-    min-height: 48px;
-    max-width: 48px;
-    max-height: 48px;
-    aspect-ratio: 1 / 1 !important;
-    border-radius: 50% !important;
-    right: -8px;
-    bottom: -8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: visible;            /* biar ring tidak terpotong */
-    position: absolute;
-  }
-
-  /* Sembunyikan SVG teks melingkar di HP — terlalu kecil jadi gepeng */
-  .hero__badge svg {
-    display: none !important;
-  }
-
-  /* Ganti tampilan badge: hanya bintang + ring tipis */
-  .hero__badge-core {
-    font-size: 1.1rem;
-    position: relative;
-    z-index: 2;
-    line-height: 1;
-  }
-
-  /* Tambah ring animasi tipis di sekeliling badge */
-  .hero__badge::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 1.5px dashed var(--blue-line);
-    animation: spin 14s linear infinite;
-  }
-
-  /* ── Foto wrap: fixed square, tidak bisa gepeng ── */
-  .hero__photo-wrap {
-    width: 130px  !important;
-    height: 130px !important;
-    min-width: 130px;
-    min-height: 130px;
-    max-width: 130px;
-    max-height: 130px;
-    aspect-ratio: 1 / 1 !important;
-    border-radius: 50%;
-    margin: 0 auto 1.5rem !important;
-    flex-shrink: 0;
-    position: relative;
-    /* Paksa tidak bisa di-stretch */
-    align-self: center;
-  }
-
-  /* Ring luar foto — fixed ── */
-  .hero__ring {
-    position: absolute;
-    border-radius: 50% !important;
-    /* inset negatif = lebih besar dari foto */
-    top: -14px;
-    left: -14px;
-    right: -14px;
-    bottom: -14px;
-    width: auto !important;
-    height: auto !important;
-    aspect-ratio: unset;
-  }
-
-  /* Foto dalam — fixed bulat */
-  .hero__photo {
-    width: 100%  !important;
-    height: 100% !important;
-    border-radius: 50% !important;
-    aspect-ratio: 1 / 1 !important;
-    overflow: hidden;
-  }
-}
-
-/* HP sangat kecil */
-@media (max-width: 380px) {
-  .hero__photo-wrap {
-    width: 110px  !important;
-    height: 110px !important;
-    min-width: 110px  !important;
-    min-height: 110px !important;
-    max-width: 110px  !important;
-    max-height: 110px !important;
-  }
-
-  .hero__badge {
-    width: 40px  !important;
-    height: 40px !important;
-    min-width: 40px  !important;
-    min-height: 40px !important;
-    max-width: 40px  !important;
-    max-height: 40px !important;
-    right: -6px;
-    bottom: -6px;
-  }
-}
-
-/* ====================================================================
-   FIX v3 — Chip spacing benar + Hubbar pill shape
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* ── Hero padding atas lebih besar supaya chip tidak terlalu atas ── */
-  .hero {
-    padding-top: 3.5vh !important;
-  }
-
-  /* ── Chip row: di atas dengan jarak bawah ke foto ── */
-  .hero__top {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin-top: 0 !important;
-    margin-bottom: 2.5rem !important;  /* jarak chip → foto */
-    padding-top: 0 !important;
-  }
-
-  /* ── BOTTOM NAV — ubah jadi floating pill, bukan full-width bar ── */
-  .appnav {
-    /* Pill floating di tengah bawah */
-    left: 50% !important;
-    right: auto !important;
-    bottom: 1rem !important;
-    transform: translateX(-50%) !important;
-    width: auto !important;
-    min-width: 220px !important;
-    max-width: 320px !important;
-    height: auto !important;
-    padding: 0.6rem 1.2rem !important;
-    gap: 0 !important;
-
-    /* Pill shape */
-    border-radius: 999px !important;
-    border: 1px solid rgba(255,255,255,0.55) !important;
-    border-top: 1px solid rgba(255,255,255,0.55) !important;
-
-    /* Glass effect */
-    background: rgba(255,255,255,0.55) !important;
-    backdrop-filter: blur(18px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
-    box-shadow:
-      0 8px 32px rgba(20,30,90,0.18),
-      inset 0 1px 0 rgba(255,255,255,0.8) !important;
-
-    justify-content: space-around !important;
-  }
-
-  /* Item nav di dalam pill */
-  .appnav__item {
-    flex-direction: column !important;
-    padding: 0.3rem 1.2rem !important;
-    gap: 3px !important;
-    font-size: 0.62rem !important;
-    border-radius: 0 !important;
-    min-width: 60px !important;
-  }
-
-  .appnav__item svg {
-    width: 20px !important;
-    height: 20px !important;
-  }
-
-  /* Active state tetap biru */
-  .appnav__item.is-active {
-    color: var(--blue) !important;
-    transform: translateY(-1px) !important;
-  }
-
-  /* Sembunyikan nav-lens di HP (tidak perlu cursor effect) */
-  .nav-lens {
-    display: none !important;
-  }
-
-  /* Body padding bawah menyesuaikan tinggi pill */
-  body {
-    padding-bottom: 5.5rem !important;
-  }
-}
-
-/* Safe area iPhone */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  @media (max-width: 819px) {
-    .appnav {
-      bottom: calc(0.75rem + env(safe-area-inset-bottom)) !important;
-    }
-    body {
-      padding-bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
-    }
-  }
-}
-
-/* ====================================================================
-   FIX v4 — Pill nav ukuran pas, tidak overlap konten
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* Pill lebih kecil dan compact */
-  .appnav {
-    min-width: unset !important;
-    max-width: 260px !important;
-    width: max-content !important;
-    padding: 0.45rem 1rem !important;
-    bottom: 0.75rem !important;
-  }
-
-  /* Item lebih rapat */
-  .appnav__item {
-    padding: 0.25rem 0.85rem !important;
-    min-width: unset !important;
-    font-size: 0.6rem !important;
-  }
-
-  .appnav__item svg {
-    width: 18px !important;
-    height: 18px !important;
-  }
-
-  /* Body padding bawah — cukup untuk pill kecil saja */
-  body {
-    padding-bottom: 4.5rem !important;
-  }
-
-  /* Skill list — pastikan tidak tertutup pill */
-  .skill__list {
-    padding-bottom: 0.5rem;
-  }
-}
-
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  @media (max-width: 819px) {
-    .appnav {
-      bottom: calc(0.6rem + env(safe-area-inset-bottom)) !important;
-    }
-    body {
-      padding-bottom: calc(4rem + env(safe-area-inset-bottom)) !important;
-    }
-  }
-}
-
-/* ====================================================================
-   FIX v5 — Nav lens/slider aktif kembali di HP (pill indicator)
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* Aktifkan kembali nav-lens di HP */
-  .nav-lens {
-    display: block !important;
-    /* Style pill indicator yang slide */
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(12px) saturate(160%) !important;
-    -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
-    border-radius: 999px !important;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.9),
-      0 2px 10px rgba(20,30,90,0.1) !important;
-    /* Transisi smooth saat slide antar tab */
-    transition:
-      left   0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      top    0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      width  0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      height 0.35s cubic-bezier(0.22, 1, 0.36, 1) !important;
-  }
-
-  /* Item aktif tetap biru, item lain abu */
-  .appnav__item.is-active {
-    color: var(--blue) !important;
-    transform: none !important;
-  }
-
-  .appnav__item:not(.is-active) {
-    color: var(--ink-dim);
-  }
-}
-
-/* ====================================================================
-   FIX v6 — Nav lens ukuran & posisi pas di dalam pill HP
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* Pastikan appnav punya position relative supaya lens bisa absolute di dalamnya */
-  .appnav {
-    position: fixed !important;
-  }
-
-  /* Nav lens — ukuran lebih kecil, padding internal pas */
-  .nav-lens {
-    display: block !important;
-    border-radius: 999px !important;
-    background: rgba(255,255,255,0.82) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,1),
-      0 1px 6px rgba(20,30,90,0.08) !important;
-    /* Kurangi tinggi lens supaya tidak pas banget sama tepi pill */
-    margin: 2px !important;
-    /* Transisi smooth */
-    transition:
-      left   0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      top    0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      width  0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      height 0.32s cubic-bezier(0.22, 1, 0.36, 1) !important;
-    z-index: 5 !important;
-    pointer-events: none !important;
-  }
-
-  /* Item nav — pastikan ukurannya konsisten supaya JS bisa ukur dengan benar */
-  .appnav__item {
-    position: relative !important;
-    z-index: 6 !important;
-    padding: 0.4rem 1.1rem !important;
-    border-radius: 999px !important;
-    flex-direction: column !important;
-    gap: 2px !important;
-    font-size: 0.6rem !important;
-    min-width: 64px !important;
-    text-align: center !important;
-  }
-
-  .appnav__item svg {
-    width: 19px !important;
-    height: 19px !important;
-  }
-
-  /* Active item warna biru */
-  .appnav__item.is-active {
-    color: var(--blue) !important;
-    transform: none !important;
-  }
-
-  /* Non-active item lebih pudar */
-  .appnav__item:not(.is-active) {
-    color: var(--ink-dim) !important;
-    transform: none !important;
-  }
-}
-
-/* ====================================================================
-   FIX v7 — Pill indicator pas center di dalam nav
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* Nav container — pastikan punya position dan overflow yang benar */
-  .appnav {
-    position: fixed !important;
-    overflow: visible !important;
-    align-items: center !important;
-  }
-
-  /* Nav lens — dikurangi tingginya supaya tidak menonjol ke atas */
-  .nav-lens {
-    /* Kurangi tinggi dengan inset vertikal */
-    top: 4px !important;
-    height: calc(100% - 8px) !important;
-    /* Lebar tetap ngikutin JS, hanya top & height yang di-override */
-    border-radius: 999px !important;
-    background: rgba(255,255,255,0.82) !important;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,1),
-      0 1px 8px rgba(20,30,90,0.1) !important;
-  }
-}
-
-/* ====================================================================
-   FIX v8 — Pill indicator ukuran pas sama item, tidak override top/height
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* Reset semua override top/height dari fix sebelumnya */
-  .nav-lens {
-    display: block !important;
-    border-radius: 999px !important;
-    background: rgba(255,255,255,0.85) !important;
-    backdrop-filter: blur(12px) saturate(160%) !important;
-    -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,1),
-      0 2px 10px rgba(20,30,90,0.1) !important;
-    /* Biarkan JS yang atur top, width, height */
-    top: unset !important;
-    height: unset !important;
-    /* Transisi smooth */
-    transition:
-      left   0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      top    0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      width  0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      height 0.32s cubic-bezier(0.22, 1, 0.36, 1) !important;
-    z-index: 5 !important;
-    pointer-events: none !important;
-    /* Margin atas supaya tidak mentok tepi pill */
-    margin-top: 0 !important;
-  }
-
-  /* Item nav — ukuran konsisten supaya JS bisa ukur dengan benar */
-  .appnav__item {
-    position: relative !important;
-    z-index: 6 !important;
-    padding: 0.45rem 1rem !important;
-    border-radius: 999px !important;
-    flex-direction: column !important;
-    gap: 2px !important;
-    font-size: 0.6rem !important;
-    min-width: 60px !important;
-    text-align: center !important;
-    /* Ukuran item yang konsisten */
-    align-self: center !important;
-  }
-
-  .appnav__item svg {
-    width: 18px !important;
-    height: 18px !important;
-  }
-
-  .appnav__item.is-active {
-    color: var(--blue) !important;
-    transform: none !important;
-  }
-
-  .appnav__item:not(.is-active) {
-    color: var(--ink-dim) !important;
-    transform: none !important;
-  }
-
-  /* Pill nav — height pas sama item */
-  .appnav {
-    padding: 0.35rem 0.5rem !important;
-    align-items: center !important;
-    height: auto !important;
-  }
+  .app-badge        { width: 30px; height: 30px; }
+  .skill__name      { font-size: 0.5rem; }
+  .skill__percent   { font-size: 0.6rem; }
+  .skill__card      { border-radius: 14px; }
 }
