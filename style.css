@@ -1146,15 +1146,7 @@ button:focus-visible {
   .category-row[aria-label="Kategori Motion Graphic"] {
     --media-h: clamp(220px, 55vw, 300px);
   }
-
-  /* Video PORTRAIT (9:16, reels/story) — sizing-nya beda dari yang lain:
-     dipas-in lebar dulu (ngikutin lebar layar HP), tingginya baru
-     nyesuaian otomatis dari aspect-ratio-nya (bukan dari --media-h). */
-  .category-row[aria-label="Kategori Motion Graphic"] .card__media.is-portrait {
-    width: 40vw;
-    height: auto;
-  }
-
+ 
   .scroll-row {
     padding: 14px 8vw 32px 5vw;
     gap: 1rem;
