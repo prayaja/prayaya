@@ -1178,10 +1178,11 @@ button:focus-visible {
 
   .appnav {
     position: fixed;
-    left: 50%;
-    right: auto;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     bottom: 0.75rem;
-    transform: translateX(-50%);
     width: max-content;
     min-width: unset;
     max-width: 260px;
