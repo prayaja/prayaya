@@ -1151,7 +1151,7 @@ button:focus-visible {
      dipas-in lebar dulu (ngikutin lebar layar HP), tingginya baru
      nyesuaian otomatis dari aspect-ratio-nya (bukan dari --media-h). */
   .category-row[aria-label="Kategori Motion Graphic"] .card__media.is-portrait {
-    width: 60vw;
+    width: 40vw;
     height: auto;
   }
 
