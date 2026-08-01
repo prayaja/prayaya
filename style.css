@@ -1294,3 +1294,35 @@ button:focus-visible {
   .skill__percent { font-size: 0.6rem; }
   .skill__card { border-radius: 14px; }
 }
+
+/* ====================================================================
+   PERFORMA MOBILE — kurangi beban render pas scroll di HP.
+   backdrop-filter (blur kaca) itu properti paling mahal buat GPU HP kalau
+   dipasang di banyak elemen sekaligus (kartu skill & karya) — tiap kartu
+   kelihatan di layar, browser harus blur ulang apa yang ada di belakangnya
+   tiap frame. Di HP kita lepas blur-nya (background tetap semi-transparan
+   biar look "glass"-nya kerasa, cuma gak nge-blur background di belakangnya
+   secara real-time). Desktop tetap pakai efek penuh.
+   ==================================================================== */
+@media (max-width: 819px) {
+  .card,
+  .skill__card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.55);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .card:hover,
+  .skill__card:hover {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* Animasi liquid-distort di background jalan terus-menerus walau lagi
+     di-scroll — di HP kita sederhanakan jadi blur polos tanpa distorsi
+     SVG, biar gak rebutan render sama scroll. Splash birunya tetap ada. */
+  .blob {
+    filter: blur(65px);
+  }
+}
