@@ -1138,21 +1138,27 @@ button:focus-visible {
   }
 
   :root {
-    --media-h: clamp(150px, 42vw, 220px);
+    --media-h: clamp(340px, 85vw, 480px);
+  }
+
+  .scroll-row {
+    padding: 14px 8vw 32px 5vw;
+    gap: 1rem;
+    scroll-padding-left: 5vw;
   }
 
   .card {
     max-width: none;
-    padding: 0.45rem;
-    border-radius: 20px;
+    padding: 0.6rem;
+    border-radius: 24px;
   }
 
   .card__body {
-    padding: 0.5rem 0.5rem 0.45rem;
+    padding: 0.7rem 0.7rem 0.6rem;
   }
 
-  .card__body h3 { font-size: 0.82rem; }
-  .card__body p  { font-size: 0.72rem; }
+  .card__body h3 { font-size: 1rem; }
+  .card__body p  { font-size: 0.82rem; }
 
   /* ── FOOTER ── */
   .footer {
