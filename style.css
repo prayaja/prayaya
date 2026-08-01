@@ -1138,7 +1138,7 @@ button:focus-visible {
   }
 
   :root {
-    --media-h: clamp(340px, 85vw, 480px);
+    --media-h: clamp(340px, 55vw, 480px);
   }
 
   /* Motion Graphic pakai video (16/9 & 9/16) — bikin lebih kecil daripada
