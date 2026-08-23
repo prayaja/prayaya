@@ -501,15 +501,6 @@
     window.addEventListener("load", () => setTimeout(moveNavLens, 100));
     moveNavLens();
 
-    // Glow kartu mengikuti posisi cursor
-    document.addEventListener("pointermove", (e) => {
-      const card = e.target.closest(".card, .skill__card");
-      if (!card) return;
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty("--mx", `${((e.clientX - rect.left) / rect.width) * 100}%`);
-      card.style.setProperty("--my", `${((e.clientY - rect.top) / rect.height) * 100}%`);
-    });
-
     // Highlight item nav sesuai section yang lagi kelihatan
     const navSections = ["hero", "karya", "kontak"].map(id => document.getElementById(id));
     const navItems = document.querySelectorAll(".appnav__item");
