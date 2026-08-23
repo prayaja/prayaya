@@ -493,20 +493,7 @@ body {
   box-shadow: 0 16px 34px var(--shadow);
   --mx: 50%;
   --my: 50%;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.35s ease,
-              backdrop-filter 0.35s ease;
-}
-
-.skill__card {
-  opacity: 0;
-  transform: translateY(24px);
-}
-
-.skill__card.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
 }
 
 .skill__card:hover {
@@ -583,31 +570,6 @@ body {
   max-width: 1680px;
   margin: 0 auto;
   padding: 4vh 0 2vh;
-}
-
-/* Fade + naik pelan pas elemen ini masuk viewport waktu scroll — diaktifkan
-   lewat class "reveal-up" (ditambah otomatis oleh JS) + "is-visible" saat
-   IntersectionObserver mendeteksinya sudah kelihatan di layar. */
-.reveal-up {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.reveal-up.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal-up,
-  .card,
-  .skill__card {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
 }
 
 .karya__intro {
@@ -708,23 +670,7 @@ body {
   box-shadow: 0 16px 15px var(--shadow);
   --mx: 50%;
   --my: 50%;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.35s ease,
-              backdrop-filter 0.35s ease;
-}
-
-/* Animasi muncul pas kartu masuk viewport waktu scroll (lihat script di
-   bawah). Sebelum "is-visible", kartu disembunyikan & digeser turun sedikit;
-   begitu ke-scroll masuk layar, IntersectionObserver nambahin class ini. */
-.card {
-  opacity: 0;
-  transform: translateY(28px);
-}
-
-.card.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
 }
 
 .card:hover {
