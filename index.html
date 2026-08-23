@@ -19,31 +19,10 @@
       </feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="70" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-
-    <!-- Filter "kaca lensa": melengkungkan/mendistorsi apapun yang ada di
-         belakang kaca (backdrop-filter), paling kelihatan di tepi kartu —
-         inilah efek "liquid glass" ala referensi kamu. -->
-    <filter id="glass-lens" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
-      <feImage result="lensmap" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none"
-        xlink:href="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='black'/%3E%3Crect x='34' y='34' width='332' height='332' rx='48' fill='white'/%3E%3C/svg%3E"/>
-      <feGaussianBlur in="lensmap" stdDeviation="16" result="lensmap-blur"/>
-      <feDisplacementMap in="SourceGraphic" in2="lensmap-blur" scale="34" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <!-- Filter "kaca lensa" versi kuat: buat bulatan lensa yang ngikutin
-         cursor di nav bar, distorsinya lebih jelas biar kerasa "cembung". -->
-    <filter id="glass-lens-strong" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">
-      <feImage result="lensmap2" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none"
-        xlink:href="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Ccircle cx='100' cy='100' r='95' fill='black'/%3E%3Ccircle cx='100' cy='100' r='55' fill='white'/%3E%3C/svg%3E"/>
-      <feGaussianBlur in="lensmap2" stdDeviation="10" result="lensmap2-blur"/>
-      <feDisplacementMap in="SourceGraphic" in2="lensmap2-blur" scale="55" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
   </svg>
 
-  <!-- 🖼️ BACKGROUND FOTO WEBSITE
-       Ganti "background.jpg" dengan nama file foto kamu (taruh di folder
-       yang sama dengan index.html). Kalau belum ada foto, otomatis fallback
-       ke warna polos, jadi nggak akan error/rusak tampilannya. -->
-  <div class="bg-photo" style="background-image: url('background.jpg')"></div>
+
+  <div class="bg-photo" style="background-image: url('background.png')"></div>
 
   <div class="blob-field" aria-hidden="true">
     <div class="blob blob--deep"></div>
@@ -80,7 +59,7 @@
         <div class="hero__text">
           <p class="eyebrow">︵‿︵‿︵‿︵︵‿︵</p>
           <h1 class="hero__name">
-            <span class="hero__subtitle">Hello Im</span>
+            <span class="hero__subtitle">Hallo Aku</span>
             <span class="hero__title">Pray</span>
           </h1>
           <p class="hero__role">AKA Pren / @prenvisual</p>
@@ -90,19 +69,10 @@
             <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
 
-          <!-- ====================================================================
-               SKILL & KEAHLIAN
-               Tiap skill = satu <div class="skill__card">, isinya:
-                 - app-badge   → kotak kecil berwarna, isi 2 huruf singkatan app
-                 - nama app
-                 - persentase
-               Mau tambah/kurang aplikasi? Tinggal copy/hapus satu blok .skill__card.
-               Mau ganti warna badge? Cari class app-badge--xxx di style.css.
-          ==================================================================== -->
           <div class="skill">
             <div class="skill__head">
               <h2>Skill &amp; <span class="highlight">Keahlian</span></h2>
-              <p>Aplikasi yang aku kuasai dan pakai sehari-hari untuk menyelesaikan project.</p>
+              <p>Aplikasi yang aku pakai sehari-hari untuk menyelesaikan project.</p>
             </div>
 
             <div class="skill__list">
@@ -111,7 +81,6 @@
                   <img src="logos/AfterEffect.webp" alt="After Effects" loading="lazy">
                 </span>
                 <p class="skill__name">After Effects</p>
-                <p class="skill__percent">0%</p>
               </div>
 
               <div class="skill__card glass">
@@ -119,7 +88,6 @@
                   <img src="logos/Photoshop.webp" alt="Photoshop" loading="lazy">
                 </span>
                 <p class="skill__name">Photoshop</p>
-                <p class="skill__percent">0%</p>
               </div>
 
               <div class="skill__card glass">
@@ -127,7 +95,6 @@
                   <img src="logos/Illustrator.webp" alt="Illustrator" loading="lazy">
                 </span>
                 <p class="skill__name">Illustrator</p>
-                <p class="skill__percent">0%</p>
               </div>
 
               <div class="skill__card glass">
@@ -135,7 +102,6 @@
                   <img src="logos/AlightMotion.webp" alt="Alight Motion" loading="lazy">
                 </span>
                 <p class="skill__name">Alight Motion</p>
-                <p class="skill__percent">0%</p>
               </div>
 
               <div class="skill__card glass">
@@ -143,7 +109,6 @@
                   <img src="logos/IbisPaintX.webp" alt="Ibis Paint X" loading="lazy">
                 </span>
                 <p class="skill__name">Ibis Paint X</p>
-                <p class="skill__percent">0%</p>
               </div>
 
               <div class="skill__card glass">
@@ -151,19 +116,15 @@
                   <img src="logos/Capcut.png" alt="CapCut" loading="lazy">
                 </span>
                 <p class="skill__name">CapCut</p>
-                <p class="skill__percent">0%</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 📸 Ganti foto: taruh file foto kamu di folder yang sama dengan
-             nama "foto-kamu.jpg" (atau ganti nama file di src bawah ini).
-             Kalau belum ada foto, otomatis muncul placeholder ikon. -->
         <div class="hero__photo-wrap">
           <div class="hero__ring"></div>
           <div class="hero__photo">
-            <img src="foto-kamu.jpg" alt="Foto Nama Kamu" onerror="this.style.display='none'">
+            <img src="foto.jpeg" onerror="this.style.display='none'">
             <svg class="hero__photo-placeholder" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.3" r="3.6" stroke="currentColor" stroke-width="1.5"/><path d="M4.3 20c1.4-4.2 4.7-6.3 7.7-6.3s6.3 2.1 7.7 6.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
           <div class="hero__badge">
@@ -180,52 +141,12 @@
     </div>
   </header>
 
-  <!-- ====================================================================
-       KARYA
-       Struktur sekarang 3 tingkat: Kategori (Design/Motion Graphic) →
-       Toko/Grup (Nama Store) → Kartu-kartu. Tiap kategori = satu
-       <section class="category-row">, di dalamnya bisa ada beberapa
-       <div class="store-group">, dan tiap store-group punya .scroll-row
-       sendiri (bisa digeser ke samping / swipe di HP).
-
-       📐 UKURAN GAMBAR/VIDEO (biar nggak ada scrollbar / kepotong):
-          Defaultnya diatur manual lewat style="aspect-ratio: ..." di
-          .card__media, samakan dengan bentuk file aslinya:
-            - 4 / 5   → slide/gambar potret (rata-rata desain)
-            - 16 / 9  → video landscape / slide lebar
-            - 9 / 16  → video vertikal (reels/story)
-            - 1 / 1   → kotak
-          Mau otomatis ngikutin ukuran asli file? Isi GOOGLE_API_KEY di
-          bagian <script> paling bawah (lihat komentar di sana) — kalau
-          diisi, angka aspect-ratio manual ini otomatis ditimpa.
-
-       Kartu sekarang HANYA menampilkan preview di halaman ini saja —
-       tidak lagi membuka tab baru ke Google Drive saat diklik.
-
-       ➕ CARA NAMBAH KARYA BARU DI TOKO YANG SUDAH ADA:
-          Copy satu blok <div class="card">...</div>, taruh di dalam
-          .scroll-row toko yang sama, lalu edit:
-            - data-gdrive     → link Google Drive kamu
-            - aspect-ratio    → sesuaikan bentuk file (lihat di atas)
-            - <h3>            → judul karya
-
-       ➕ CARA NAMBAH TOKO/GRUP BARU DI KATEGORI YANG SUDAH ADA:
-          Copy SATU BLOK <div class="store-group">...</div> LENGKAP,
-          taruh di bawah store-group terakhir dalam kategori yang sama,
-          lalu ganti judul toko (<h3 class="store-group__title">) dan
-          kartu-kartunya.
-
-       ➕ CARA NAMBAH KATEGORI BARU:
-          Copy SATU BLOK <section class="category-row"> LENGKAP (dari
-          <section sampai </section>), taruh di bawah section terakhir,
-          lalu edit judul kategori, nama toko, dan kartu-kartunya.
-  ==================================================================== -->
   <main id="karya">
 
     <div class="karya__intro">
       <p class="eyebrow">Karya Pilihan</p>
       <h2>Project &amp; <span class="highlight">Karya</span></h2>
-      <p>Kumpulan desain dan motion graphic yang pernah aku kerjakan — geser tiap baris ke samping untuk lihat semua.</p>
+      <p>Kumpulan desain dan motion graphic yang pernah aku kerjakan.</p>
     </div>
 
     <!-- ============ KATEGORI: DESIGN ============ -->
@@ -235,148 +156,181 @@
         <p class="category-row__count" data-count-label>0 karya</p>
       </div>
 
-      <!-- 🏬 TOKO/GRUP DI DALAM KATEGORI INI
-           Mau nambah toko/grup lain di kategori Design? Copy satu blok
-           <div class="store-group">...</div> LENGKAP, taruh di bawahnya,
-           lalu ganti judul & kartu-kartunya. -->
       <div class="store-group">
-        <h3 class="store-group__title">Nama Store</h3>
+        <h3 class="store-group__title">Growtopia Banner</h3>
         <div class="scroll-row" data-type="image">
 
           <div class="card">
             <div class="card__media" style="aspect-ratio: 20 / 9" data-gdrive="https://drive.google.com/file/d/172l-opy7USLiTfNL6dmnTqn9NX8JwsVQ/view?usp=sharing"></div>
             <div class="card__body">
-              <h3>Growtopia Banner</h3>
-              <p>Lyodra Design</p>
+              <h3>Lyodra Design</h3>
+              <p>Growtopia Banner</p>
             </div>
           </div>
 
           <div class="card">
             <div class="card__media" style="aspect-ratio: 4 / 3" data-gdrive="https://drive.google.com/file/d/1am1Yst7n81W9tJoaBz18KV2pgjGfFnKa/view?usp=drive_link"></div>
             <div class="card__body">
-              <h3>Growtopia Banner</h3>
-              <p>Bank EGG</p>
+              <h3>Bank EGG</h3>
+              <p>Growtopia Banner</p>
             </div>
           </div>
 
           <div class="card">
             <div class="card__media" style="aspect-ratio: 9 / 16" data-gdrive="https://drive.google.com/file/d/1wVCQ6olkKCcktH0b0oyxl-9BYTbqH7oj/view?usp=drive_link"></div>
             <div class="card__body">
-              <h3>Growtopia Banner</h3>
-              <p>SSUR Event</p>
+              <h3>SSUR Event</h3>
+              <p>Growtopia Banner</p>
             </div>
           </div>
 
             <div class="card">
             <div class="card__media" style="aspect-ratio: 9 / 16" data-gdrive="https://drive.google.com/file/d/17FjFHTtMVeuaCyWQPwLANmpGH-LhTH_A/view?usp=drive_link"></div>
             <div class="card__body">
-              <h3>Growtopia Banner</h3>
-              <p>SSUR Event</p>
+              <h3>SSUR Event</h3>
+              <p>Growtopia Banner</p>
             </div>
           </div>
 
         </div>
       </div>
-      <!-- 👆 copy .store-group di atas buat toko baru di kategori Design 👆 -->
 
     </section>
 
     <!-- ============ KATEGORI: MOTION GRAPHIC ============ -->
-    <!-- 👆 COPY SECTION INI (dari <section sampai </section>) UNTUK BIKIN KATEGORI BARU 👇 -->
     <section class="category-row" aria-label="Kategori Motion Graphic">
       <div class="category-row__head">
         <div>
           <h2>Motion Graphic</h2>
-          <!-- TAMBAHKAN TEKS DI SINI -->
-          <p class="category-row__desc">Kalo ngebug refresh dlu yagesya, kalo kurang gede tinggal klik panah pojok kanan atas di videonya.</p>
         </div>
         <p class="category-row__count" data-count-label>0 karya</p>
       </div>
 
       <div class="store-group">
-        <h3 class="store-group__title">Nama Store</h3>
+        <h3 class="store-group__title">Promotion Overlay</h3>
         <div class="scroll-row" data-type="video">
 
-        <div class="card">
-          <div class="card__media" style="aspect-ratio: 16 / 9" data-gdrive="https://drive.google.com/file/d/1chxcdxHwKwXnlJ_IHCvqUUtttsbArbAY/view?usp=sharing"></div>
-          <div class="card__body">
-            <h3>Glass Morphism</h3>
-            <p>Claude Jawa</p>
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 16 / 9" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787482302/RapsLogoAnimation_E3EA8CD.mp4"></div>
+            <div class="card__body">
+              <h3>Rapspoint Overlay</h3>
+              <p>Promotion Overlay</p>
+            </div>
           </div>
-        </div>
 
-        <div class="card">
-          <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://drive.google.com/file/d/1FtlMkBacxFxcmZqBKN-5m2rlD2aiEw5l/view?usp=drive_link"></div>
-          <div class="card__body">
-            <h3>Overlay SSU</h3>
-            <p>SSUT SSUR Overlay</p>
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787483303/MayobloxAnimationPromotion_F5DB23C.mp4"></div>
+            <div class="card__body">
+              <h3>Mayoblox Overlay</h3>
+              <p>Promotion Overlay</p>
+            </div>
           </div>
-        </div>
 
-            <div class="card">
-          <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://drive.google.com/file/d/1UOjDlHsAJuTG089uAcXoSJMYhaU_XJYO/view?usp=drive_link"></div>
-          <div class="card__body">
-            <h3>Idle Animaiton</h3>
-            <p>Megumi Growtopia</p>
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787483413/inokinok_EEBD6A3.mp4"></div>
+            <div class="card__body">
+              <h3>InoMart Overlay</h3>
+              <p>Promotion Overlay</p>
+            </div>
           </div>
-        </div>
 
-             <div class="card">
-          <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://drive.google.com/file/d/16nnN74wmUaVwaWc83F73DIHX5Ua_H3rq/view?usp=drive_link"></div>
-          <div class="card__body">
-            <h3>Overlay Sewa</h3>
-            <p>Sewajasa Overlay</p>
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787488253/AnimationPromotionSSUR_SSUT_36DC3AA.mp4"></div>
+            <div class="card__body">
+              <h3>SSU Overlay (Growtopia)</h3>
+              <p>Promotion Overlay</p>
+            </div>
           </div>
-        </div>
-          
+
         </div>
       </div>
-      <!-- 👆 copy .store-group di atas buat toko baru di kategori Motion Graphic 👆 -->
+      <!-- sub kate -->
+
+      <div class="store-group">
+        <h3 class="store-group__title">Stream Banner Overlay</h3>
+        <div class="scroll-row" data-type="video">
+
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787483411/GrowclassXP4kong_BG_D7D23E8.mp4"></div>
+            <div class="card__body">
+              <h3>P4kong Overlay</h3>
+              <p>Stream Banner Overlay</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787490555/RapsStream_B6567D3.mp4"></div>
+            <div class="card__body">
+              <h3>RapsStream</h3>
+              <p>Stream Banner Overlay</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="store-group">
+        <h3 class="store-group__title">Short Animation Promotion</h3>
+        <div class="scroll-row" data-type="video">
+
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787482326/RapsJokiMograph_5EA450E.mp4"></div>
+            <div class="card__body">
+              <h3>RapsJoki</h3>
+              <p>Short Animation Promotion</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787482341/MograpRapspoint1_135BDD6.mp4"></div>
+            <div class="card__body">
+              <h3>Rapspoint</h3>
+              <p>Short Animation Promotion</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787490452/RapssewaMograph_ED97917.mp4"></div>
+            <div class="card__body">
+              <h3>RapsSewa</h3>
+              <p>Short Animation Promotion</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__media" style="aspect-ratio: 1 / 1" data-gdrive="https://res.cloudinary.com/zrl00ntj/video/upload/v1787490565/JokiRapsMograph_92D2EE7.mp4"></div>
+            <div class="card__body">
+              <h3>JokiRaps</h3>
+              <p>Short Animation Promotion</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
 
     </section>
-    <!-- 👆 kalau nambah kategori baru, copy dari sini ke atas 👆 -->
+    <!-- kategori -->
 
   </main>
 
   <!-- ==================== KONTAK ==================== -->
   <footer class="footer" id="kontak">
     <div class="footer__banner glasscard">
-      <h2>Yuk, bikin sesuatu <span class="highlight">bareng.</span></h2>
-      <p>Ada project atau kolaborasi yang mau dibahas? Kirim email atau hubungi aku langsung.</p>
-      <a class="scroll-tag" href="mailto:emailkamu@contoh.com">
-        <span>Kirim Email</span>
+      <h2>Butuh jasa <span class="highlight">edit</span> juga?</h2>
+      <p>Kuy langsung chat aku lewat WhatsApp.</p>
+      <a class="scroll-tag" href="https://wa.me/6281234567890?text=Halo%20Pray%2C%20aku%20mau%20diskusi%20project" target="_blank" rel="noopener">
+        <span>Chat WhatsApp</span>
         <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
     </div>
     <div class="footer__meta">
       <p class="footer__handle">@prenvisual / @prayogaajlh</p>
-      <p class="footer__copy">© <span id="year"></span> Pray</p>
     </div>
   </footer>
 
   <script>
-    /* ============================================================================
-       (OPSIONAL) DETEKSI OTOMATIS UKURAN GAMBAR/VIDEO
-
-       Kalau diisi, aspect-ratio kartu akan otomatis mengikuti ukuran asli
-       file di Google Drive kamu — nggak perlu atur aspect-ratio manual lagi.
-       Kalau dikosongkan, sistem tetap pakai aspect-ratio manual yang sudah
-       kamu set di style="aspect-ratio: ..." pada tiap kartu (aman, nggak error).
-
-       CARA BIKIN API KEY (gratis, ~5 menit):
-       1. Buka https://console.cloud.google.com/ → buat project baru (bebas nama).
-       2. Menu kiri: "APIs & Services" → "Library" → cari "Google Drive API" → Enable.
-       3. Menu "Credentials" → "Create Credentials" → "API key" → copy key-nya.
-       4. (Disarankan) Klik key itu → "Restrict key":
-            - API restrictions: pilih "Google Drive API" saja.
-            - Application restrictions: "Websites" → isi domain website kamu.
-          Ini biar key-nya nggak disalahgunakan orang lain.
-       5. Tempel key-nya di GOOGLE_API_KEY di bawah ini.
-
-       Kuota gratisnya besar (puluhan ribu request/hari), lebih dari cukup
-       buat portofolio pribadi.
-    ============================================================================= */
-    const GOOGLE_API_KEY = ""; // ← tempel API key Google Drive kamu di sini (opsional)
+    const GOOGLE_API_KEY = "";
 
     function extractDriveId(url) {
       const m = url.match(/[-\w]{20,}/);
@@ -387,9 +341,30 @@
       return `https://drive.google.com/file/d/${id}/preview`;
     }
 
-    // Coba ambil lebar x tinggi asli file dari Google Drive, lalu terapkan
-    // sebagai aspect-ratio. Kalau gagal (key kosong, offline, dsb), diamkan
-    // saja — kartu akan tetap pakai aspect-ratio manual yang sudah ada.
+
+    function extractYouTubeId(url) {
+      const patterns = [
+        /youtu\.be\/([\w-]{11})/,
+        /youtube\.com\/watch\?v=([\w-]{11})/,
+        /youtube\.com\/shorts\/([\w-]{11})/,
+        /youtube\.com\/embed\/([\w-]{11})/
+      ];
+      for (const re of patterns) {
+        const m = url.match(re);
+        if (m) return m[1];
+      }
+      return null;
+    }
+
+    function toYouTubeEmbedLink(id) {
+      return `https://www.youtube-nocookie.com/embed/${id}?rel=0`;
+    }
+
+    function isCloudinaryVideo(url) {
+      return /res\.cloudinary\.com\/.+\/video\/upload\//i.test(url)
+          || /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(url);
+    }
+
     async function applyAutoRatio(mediaEl, id) {
       if (!GOOGLE_API_KEY) return;
       try {
@@ -403,23 +378,16 @@
           mediaEl.style.aspectRatio = `${meta.width} / ${meta.height}`;
           markPortrait(mediaEl);
         }
-      } catch (err) {
-        // biarkan, fallback ke aspect-ratio manual
-      }
+      } catch (err) {}
     }
 
-    // Untuk kategori GAMBAR (type="image"): tampilkan sebagai <img> biasa
-    // lewat thumbnail Drive — ini BENERAN menghilangkan tombol panah/UI
-    // Drive, karena yang dimuat cuma file gambarnya, bukan halaman preview-nya.
+    // Thumbnail Drive langsung jadi <img> - jadi nggak ada UI/tombol Drive.
     function toThumbnailLink(id) {
       return `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
     }
 
-    // Tandai kartu potret/vertikal (9:16, dsb) biar dapat batas ukuran
-    // (max-height/max-width) yang beda dari kartu landscape/kotak — lihat
-    // .card__media.is-portrait di style.css. Dibaca dari aspect-ratio yang
-    // sedang aktif di kartu itu (baik yang diset manual di HTML, maupun
-    // yang ditimpa otomatis oleh applyAutoRatio kalau GOOGLE_API_KEY diisi).
+    // Tandai kartu portrait (9:16 dst) biar dapat batas ukuran beda dari
+    // landscape/kotak - lihat .card__media.is-portrait di style.css.
     function markPortrait(media) {
       const ratioStr = media.style.aspectRatio;
       if (!ratioStr) return;
@@ -429,50 +397,77 @@
     }
     document.querySelectorAll(".card__media").forEach(markPortrait);
 
-    // Pasang media ke tiap .card__media yang punya data-gdrive
     document.querySelectorAll(".card__media[data-gdrive]").forEach(media => {
       const link = media.getAttribute("data-gdrive");
-      const id = extractDriveId(link);
-      if (!id) return;
-
       const isVideo = media.closest(".scroll-row")?.dataset.type === "video";
 
       if (isVideo) {
-        // Video tetap butuh iframe (biar bisa diputar), jadi tombol panah
-        // dari Drive nggak bisa dihapus total — kita tutup pakai kotak kecil
-        // di pojoknya sebagai akal-akalan visual (lihat .card__mask di CSS).
+        // Urutan cek: Cloudinary dulu, lalu YouTube, baru fallback Drive.
+        if (isCloudinaryVideo(link)) {
+          const video = document.createElement("video");
+          video.src = link;
+          video.controls = true;
+          video.playsInline = true;
+          video.preload = "metadata";
+          // Matikan tombol download & picture-in-picture di menu player.
+          video.setAttribute("controlsList", "nodownload noremoteplayback");
+          video.disablePictureInPicture = true;
+          // Proteksi ringan biar klik-kanan nggak langsung "Save video as..."
+          video.addEventListener("contextmenu", e => e.preventDefault());
+          media.classList.add("is-native-video");
+
+          video.addEventListener("loadedmetadata", () => {
+            if (video.videoWidth && video.videoHeight) {
+              media.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
+              markPortrait(media);
+            }
+          });
+
+          media.appendChild(video);
+          return;
+        }
+
+        const ytId = extractYouTubeId(link);
+        if (ytId) {
+          const iframe = document.createElement("iframe");
+          iframe.src = toYouTubeEmbedLink(ytId);
+          iframe.loading = "lazy";
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+          iframe.allowFullscreen = true;
+          media.classList.add("is-youtube");
+          media.appendChild(iframe);
+          return;
+        }
+
+        const id = extractDriveId(link);
+        if (!id) return;
         const iframe = document.createElement("iframe");
         iframe.src = toEmbedLink(id);
         iframe.loading = "lazy";
         iframe.allow = "autoplay";
         iframe.allowFullscreen = true;
         media.appendChild(iframe);
+        applyAutoRatio(media, id);
 
       } else {
-        // Gambar/slide: tanpa iframe sama sekali, jadi tanpa tombol apapun.
+        const id = extractDriveId(link);
+        if (!id) return;
         const img = document.createElement("img");
         img.src = toThumbnailLink(id);
         img.loading = "lazy";
         img.alt = "";
         media.appendChild(img);
+        applyAutoRatio(media, id);
       }
-
-      applyAutoRatio(media, id);
     });
 
-    // Hitung otomatis jumlah kartu per kategori
     document.querySelectorAll(".category-row").forEach(section => {
       const count = section.querySelectorAll(".card").length;
       const label = section.querySelector("[data-count-label]");
       if (label) label.textContent = `${count} karya`;
     });
 
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // ============================================================
-    // LENSA DOCK — bulatan kaca NEMPEL & berubah bentuk mengikuti
-    // tab yang lagi aktif (bukan ngikutin cursor lagi)
-    // ============================================================
+    // Bulatan kaca di nav yang geser mengikuti tab aktif
     const appnav = document.getElementById("appnav");
     const navLens = appnav.querySelector(".nav-lens");
 
@@ -484,9 +479,8 @@
       const isMobile = window.innerWidth < 820;
 
       if (isMobile) {
-        // Ukur item secara langsung, lalu kurangi sedikit padding
-        const padX = 0;   // horizontal: pas sama item
-        const padY = 5;   // vertical: 5px dari atas-bawah nav
+        const padX = 0;
+        const padY = 5;
         navLens.style.left   = `${itemRect.left - navRect.left - padX}px`;
         navLens.style.top    = `${padY}px`;
         navLens.style.width  = `${itemRect.width + padX * 2}px`;
@@ -500,13 +494,10 @@
     }
 
     window.addEventListener("resize", moveNavLens);
-    window.addEventListener("load", () => { setTimeout(moveNavLens, 100); });
-    window.addEventListener("resize", moveNavLens);
+    window.addEventListener("load", () => setTimeout(moveNavLens, 100));
     moveNavLens();
 
-    // ============================================================
-    // KARTU INTERAKTIF — glow ngikutin cursor + sedikit terangkat
-    // ============================================================
+    // Glow kartu mengikuti posisi cursor
     document.addEventListener("pointermove", (e) => {
       const card = e.target.closest(".card, .skill__card");
       if (!card) return;
@@ -515,7 +506,7 @@
       card.style.setProperty("--my", `${((e.clientY - rect.top) / rect.height) * 100}%`);
     });
 
-    // highlight nav item aktif sesuai section yang terlihat
+    // Highlight item nav sesuai section yang lagi kelihatan
     const navSections = ["hero", "karya", "kontak"].map(id => document.getElementById(id));
     const navItems = document.querySelectorAll(".appnav__item");
     navItems.forEach(item => {
@@ -533,6 +524,32 @@
       });
     }, { threshold: 0.4 });
     navSections.forEach(s => s && navObserver.observe(s));
+
+    // Scroll roda mouse ke atas-bawah dikonversi jadi geser kartu ke samping
+    // (khusus desktop/mouse, nggak ganggu gesture trackpad/touch)
+    (function enableWheelToHorizontal() {
+      if (!(window.matchMedia && window.matchMedia('(pointer: fine)').matches)) return;
+
+      const speed = 1.0;
+
+      document.addEventListener('wheel', (e) => {
+        if (e.ctrlKey || e.metaKey) return;
+
+        const target = e.target.closest('.scroll-row, .card, .card__media, video, iframe');
+        if (!target) return;
+
+        const row = target.closest('.scroll-row');
+        if (!row || row.scrollWidth <= row.clientWidth) return;
+        if (Math.abs(e.deltaY) === 0) return;
+
+        e.preventDefault();
+        try {
+          row.scrollBy({ left: e.deltaY * speed, behavior: 'smooth' });
+        } catch (err) {
+          row.scrollLeft += e.deltaY * speed;
+        }
+      }, { passive: false });
+    })();
   </script>
 </body>
 </html>

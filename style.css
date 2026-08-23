@@ -754,6 +754,27 @@ body {
   display: block;
 }
 
+/* Embed YouTube sudah bersih dari awal (nggak ada tombol/UI nyempil kayak
+   Drive), jadi nggak perlu trik zoom 300% di atas — cukup isi penuh kotaknya. */
+.card__media.is-youtube iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
+
+/* Video Cloudinary (tag <video> asli) — sama seperti YouTube, langsung
+   isi penuh kotaknya tanpa trik zoom, karena bukan iframe cross-origin. */
+.card__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #05060a;
+}
+
 /* Penutup kosmetik tombol "buka di Drive" yang muncul di pojok kanan atas
    preview video Drive. Ini cuma akal-akalan visual (nutup, bukan menghapus
    beneran) karena kontennya cross-origin — lihat catatan di index.html. */
