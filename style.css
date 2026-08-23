@@ -25,7 +25,10 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
 
 body {
   margin: 0;
@@ -50,7 +53,11 @@ body {
    ==================================================================== */
 .bg-photo {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh; /* tinggi viewport yang STABIL, gak resize tiap address bar HP collapse/muncul — ini yang bikin background zoom patah-patah pas scroll */
   z-index: 0;
   background-color: var(--bg);
   background-size: cover;
@@ -70,7 +77,11 @@ body {
    ==================================================================== */
 .blob-field {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -139,9 +150,7 @@ body {
 }
 
 /* Bulatan lensa yang ngikutin cursor — efek dock ala iOS/macOS.
-   Distorsinya beneran (backdrop-filter + glass-lens-strong), pinggirnya
-   dikasih cincin tipis warna-warni (chromatic aberration) biar mirip kaca
-   asli. Nggak muncul di HP karena di sana nggak ada cursor. */
+   Nggak muncul di HP karena di sana nggak ada cursor. */
 .nav-lens {
   position: absolute;
   border-radius: 18px;
@@ -484,7 +493,20 @@ body {
   box-shadow: 0 16px 34px var(--shadow);
   --mx: 50%;
   --my: 50%;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease,
+              backdrop-filter 0.35s ease;
+}
+
+.skill__card {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.skill__card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .skill__card:hover {
@@ -527,14 +549,6 @@ body {
   line-height: 1.25;
 }
 
-.skill__percent {
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--blue);
-  margin: 0;
-}
-
 .app-badge {
   display: inline-flex;
   align-items: center;
@@ -569,6 +583,31 @@ body {
   max-width: 1680px;
   margin: 0 auto;
   padding: 4vh 0 2vh;
+}
+
+/* Fade + naik pelan pas elemen ini masuk viewport waktu scroll — diaktifkan
+   lewat class "reveal-up" (ditambah otomatis oleh JS) + "is-visible" saat
+   IntersectionObserver mendeteksinya sudah kelihatan di layar. */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .card,
+  .skill__card {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 .karya__intro {
@@ -606,12 +645,6 @@ body {
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 3.4vw, 2.1rem);
   margin: 0;
-}
-
-.category-row__desc {
-  font-size: 0.88rem;
-  color: var(--ink-dim);
-  margin: 0.3rem 0 0;
 }
 
 .category-row__count {
@@ -675,12 +708,28 @@ body {
   box-shadow: 0 16px 15px var(--shadow);
   --mx: 50%;
   --my: 50%;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease,
+              backdrop-filter 0.35s ease;
+}
+
+/* Animasi muncul pas kartu masuk viewport waktu scroll (lihat script di
+   bawah). Sebelum "is-visible", kartu disembunyikan & digeser turun sedikit;
+   begitu ke-scroll masuk layar, IntersectionObserver nambahin class ini. */
+.card {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 10px 15 px var(--shadow);
+  box-shadow: 0 10px 15px var(--shadow);
   backdrop-filter: blur(6px) saturate(180%);
   -webkit-backdrop-filter: blur(6px) saturate(180%);
 }
@@ -862,21 +911,6 @@ body {
   font-weight: 600;
   color: var(--blue);
   margin: 0 0 0.4rem;
-}
-
-.footer__mail {
-  display: inline-block;
-  color: var(--ink);
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 1.5px solid var(--blue-line);
-  margin-bottom: 0.8rem;
-}
-
-.footer__copy {
-  color: var(--ink-dim);
-  font-size: 0.8rem;
-  margin: 0;
 }
 
 /* ====================================================================
@@ -1122,11 +1156,6 @@ button:focus-visible {
     font-weight: 600;
   }
 
-  .skill__percent {
-    font-size: 0.65rem;
-    font-weight: 700;
-  }
-
   /* ── KARYA SECTION ── */
   #karya {
     padding: 3vh 0 2vh;
@@ -1324,7 +1353,6 @@ button:focus-visible {
 
   .app-badge { width: 30px; height: 30px; }
   .skill__name { font-size: 0.5rem; }
-  .skill__percent { font-size: 0.6rem; }
   .skill__card { border-radius: 14px; }
 }
 

@@ -124,7 +124,7 @@
         <div class="hero__photo-wrap">
           <div class="hero__ring"></div>
           <div class="hero__photo">
-            <img src="foto.jpeg" onerror="this.style.display='none'">
+            <img src="foto.jpg" alt="Foto Nama Kamu" onerror="this.style.display='none'">
             <svg class="hero__photo-placeholder" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.3" r="3.6" stroke="currentColor" stroke-width="1.5"/><path d="M4.3 20c1.4-4.2 4.7-6.3 7.7-6.3s6.3 2.1 7.7 6.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
           <div class="hero__badge">
@@ -143,7 +143,7 @@
 
   <main id="karya">
 
-    <div class="karya__intro">
+    <div class="karya__intro reveal-up">
       <p class="eyebrow">Karya Pilihan</p>
       <h2>Project &amp; <span class="highlight">Karya</span></h2>
       <p>Kumpulan desain dan motion graphic yang pernah aku kerjakan.</p>
@@ -151,7 +151,7 @@
 
     <!-- ============ KATEGORI: DESIGN ============ -->
     <section class="category-row" aria-label="Kategori Design">
-      <div class="category-row__head">
+      <div class="category-row__head reveal-up">
         <h2>Design</h2>
         <p class="category-row__count" data-count-label>0 karya</p>
       </div>
@@ -199,7 +199,7 @@
 
     <!-- ============ KATEGORI: MOTION GRAPHIC ============ -->
     <section class="category-row" aria-label="Kategori Motion Graphic">
-      <div class="category-row__head">
+      <div class="category-row__head reveal-up">
         <div>
           <h2>Motion Graphic</h2>
         </div>
@@ -244,7 +244,7 @@
 
         </div>
       </div>
-      <!-- sub kate -->
+      <!-- 👆 copy .store-group di atas buat toko baru di kategori Motion Graphic 👆 -->
 
       <div class="store-group">
         <h3 class="store-group__title">Stream Banner Overlay</h3>
@@ -310,13 +310,13 @@
 
 
     </section>
-    <!-- kategori -->
+    <!-- 👆 kalau nambah kategori baru, copy dari sini ke atas 👆 -->
 
   </main>
 
   <!-- ==================== KONTAK ==================== -->
   <footer class="footer" id="kontak">
-    <div class="footer__banner glasscard">
+    <div class="footer__banner glasscard reveal-up">
       <h2>Butuh jasa <span class="highlight">edit</span> juga?</h2>
       <p>Kuy langsung chat aku lewat WhatsApp.</p>
       <a class="scroll-tag" href="https://wa.me/6281234567890?text=Halo%20Pray%2C%20aku%20mau%20diskusi%20project" target="_blank" rel="noopener">
@@ -330,6 +330,8 @@
   </footer>
 
   <script>
+    // Opsional: isi API key Google Drive di sini kalau mau aspect-ratio
+    // gambar/video Drive terdeteksi otomatis. Kosongkan kalau nggak perlu.
     const GOOGLE_API_KEY = "";
 
     function extractDriveId(url) {
@@ -341,7 +343,7 @@
       return `https://drive.google.com/file/d/${id}/preview`;
     }
 
-
+    // Ambil ID video dari link YouTube (watch, youtu.be, shorts, embed).
     function extractYouTubeId(url) {
       const patterns = [
         /youtu\.be\/([\w-]{11})/,
@@ -365,6 +367,8 @@
           || /\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(url);
     }
 
+    // Ambil dimensi asli file dari Drive lalu set jadi aspect-ratio.
+    // Gagal (key kosong/offline) ya diamkan, tetap pakai ratio manual di HTML.
     async function applyAutoRatio(mediaEl, id) {
       if (!GOOGLE_API_KEY) return;
       try {
@@ -466,6 +470,36 @@
       const label = section.querySelector("[data-count-label]");
       if (label) label.textContent = `${count} karya`;
     });
+
+    // Reveal-on-scroll: kartu & elemen ber-class "reveal-up" muncul dengan
+    // fade + geser naik pelan begitu masuk viewport, bukan langsung nongol.
+    // Sedikit delay bertahap antar-kartu dalam satu baris biar kelihatan
+    // hidup, bukan semuanya nongol bareng.
+    (function enableScrollReveal() {
+      const targets = document.querySelectorAll(".card, .skill__card, .reveal-up");
+
+      document.querySelectorAll(".scroll-row").forEach(row => {
+        Array.from(row.children).forEach((card, i) => {
+          card.style.transitionDelay = `${Math.min(i, 6) * 60}ms`;
+        });
+      });
+
+      if (!("IntersectionObserver" in window)) {
+        targets.forEach(el => el.classList.add("is-visible"));
+        return;
+      }
+
+      const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+
+      targets.forEach(el => revealObserver.observe(el));
+    })();
 
     // Bulatan kaca di nav yang geser mengikuti tab aktif
     const appnav = document.getElementById("appnav");
