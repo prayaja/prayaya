@@ -739,6 +739,88 @@ body {
   background: #05060a;
 }
 
+/* Fallback: kalau ada browser yang tetap fullscreen-in videonya langsung
+   (bukan kotak kartunya), minimal object-fit-nya udah benar juga di sini. */
+.card__media video:fullscreen,
+.card__media video:-webkit-full-screen,
+.card__media video:-moz-full-screen {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Tombol fullscreen bawaan browser suka nggak konsisten — sebagian
+   device/browser nge-render fullscreen video pakai mekanisme native
+   sendiri yang ngelewatin CSS kita sepenuhnya, hasilnya videonya kepotong
+   walau object-fit udah diatur. Makanya kita sembunyikan tombol fullscreen
+   bawaan lalu ganti pakai tombol custom kita sendiri (lihat script) yang
+   men-fullscreen-kan KOTAK KARTUNYA — dengan cara ini letterbox/contain-nya
+   dijamin kepakai, karena kotaknya cuma <div> biasa yang kita kontrol
+   penuh lewat CSS, bukan native fullscreen video device. */
+.card__media video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+}
+
+.media-fullscreen-btn {
+  position: absolute;
+  z-index: 10;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.media-fullscreen-btn:hover,
+.media-fullscreen-btn:focus-visible {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.media-fullscreen-btn svg { width: 16px; height: 16px; }
+
+/* Pas KOTAK kartu (bukan video-nya langsung) yang lagi fullscreen: video
+   ditaruh di tengah dengan ukuran "contain" (utuh, nggak kepotong), sisa
+   ruangnya dikasih background hitam (letterbox) — dan ini dijamin
+   konsisten di semua browser karena elemen yang di-fullscreen-kan cuma
+   <div> polos, bukan video native. */
+.card__media.is-native-video:fullscreen,
+.card__media.is-native-video:-webkit-full-screen,
+.card__media.is-native-video:-moz-full-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  border-radius: 0;
+}
+
+.card__media.is-native-video:fullscreen video,
+.card__media.is-native-video:-webkit-full-screen video,
+.card__media.is-native-video:-moz-full-screen video {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  background: transparent;
+}
+
 /* Penutup kosmetik tombol "buka di Drive" yang muncul di pojok kanan atas
    preview video Drive. Ini cuma akal-akalan visual (nutup, bukan menghapus
    beneran) karena kontennya cross-origin — lihat catatan di index.html. */

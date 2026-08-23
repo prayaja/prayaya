@@ -401,6 +401,42 @@
     }
     document.querySelectorAll(".card__media").forEach(markPortrait);
 
+    // Tombol fullscreen custom: fullscreen-in KOTAK kartunya (.card__media),
+    // bukan video-nya langsung. Ini karena browser/device tertentu suka
+    // nge-render fullscreen <video> pakai mekanisme native sendiri yang
+    // ngelewatin CSS kita — hasilnya video kepotong walau object-fit udah
+    // diatur. Kalau yang di-fullscreen-in kotaknya (elemen <div> biasa),
+    // kontrol tampilannya (contain/letterbox) dijamin konsisten.
+    const FS_EXPAND_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/></svg>`;
+    const FS_COMPRESS_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v3a2 2 0 0 1-2 2H4M20 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/></svg>`;
+
+    function addFullscreenButton(media) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "media-fullscreen-btn";
+      btn.setAttribute("aria-label", "Fullscreen");
+      btn.innerHTML = FS_EXPAND_ICON;
+
+      const isActive = () =>
+        (document.fullscreenElement || document.webkitFullscreenElement) === media;
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (isActive()) {
+          (document.exitFullscreen || document.webkitExitFullscreen)?.call(document);
+        } else {
+          const req = media.requestFullscreen || media.webkitRequestFullscreen;
+          req?.call(media);
+        }
+      });
+
+      const syncIcon = () => { btn.innerHTML = isActive() ? FS_COMPRESS_ICON : FS_EXPAND_ICON; };
+      document.addEventListener("fullscreenchange", syncIcon);
+      document.addEventListener("webkitfullscreenchange", syncIcon);
+
+      media.appendChild(btn);
+    }
+
     document.querySelectorAll(".card__media[data-gdrive]").forEach(media => {
       const link = media.getAttribute("data-gdrive");
       const isVideo = media.closest(".scroll-row")?.dataset.type === "video";
@@ -428,6 +464,7 @@
           });
 
           media.appendChild(video);
+          addFullscreenButton(media);
           return;
         }
 
