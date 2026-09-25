@@ -1,43 +1,78 @@
 /* ====================================================================
-   TOKEN DESAIN — BLUE SPLASH LIQUID GLASS
+   TOKEN DESAIN — WHITE GRID HOLOGRAM / MINIMALISTIC
+  Dasar putih dengan grid tipis ala blueprint. Aksen biru dan light blue
+  dipakai pada judul hero, garis bawah highlight, nav aktif, badge, dan kartu.
    ==================================================================== */
 :root {
-  --bg: #fbfcff;
-  --ink: #0b0d17;
-  --ink-dim: #6b7280;
+  --bg: #fbfcfe;
+  --bg-soft: #ffffff;
+  --bg-raise: #f3f6fb;
+  --ink: #141b2d;
+  --ink-dim: #69728a;
+  --line: rgba(90, 110, 160, 0.16);
+  --line-strong: rgba(90, 110, 160, 0.3);
 
-  --blue: #2451ff;
-  --blue-deep: #1531b8;
-  --blue-mid: #6f93ff;
-  --blue-pale: #eaf0ff;
-  --blue-line: rgba(36, 81, 255, 0.22);
+  --accent: #4657e6;
+  --accent-deep: #3243c9;
+  --accent-soft: rgba(70, 87, 230, 0.09);
+  --accent-line: rgba(70, 87, 230, 0.4);
 
-  --surface: rgba(255, 255, 255, 0.22);
-  --surface-strong: rgba(255, 255, 255, 0.4);
-  --shadow: rgba(20, 30, 90, 0.22);
+  --holo: linear-gradient(120deg, #9bdcff 0%, #5ba9f5 52%, #2f5fd0 100%);
+  --holo-soft: linear-gradient(120deg, #e7f7ff 0%, #c9eaff 52%, #a9cdf9 100%);
 
-  --font-display: "Unbounded", sans-serif;
+  --shadow-sm: 0 6px 18px rgba(70, 90, 150, 0.1);
+  --shadow-md: 0 18px 42px rgba(70, 90, 150, 0.14);
+  --shadow-lg: 0 32px 80px rgba(70, 90, 150, 0.18);
+
+  --font-display: "Bricolage Grotesque", sans-serif;
   --font-body: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
 
-  --radius-lg: 28px;
-  --radius-md: 20px;
-  --nav-h: 68px;
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --nav-h: 66px;
 }
 
 * { box-sizing: border-box; }
+
 html {
+  color-scheme: light;
   scroll-behavior: smooth;
   overscroll-behavior-y: none;
+  background: var(--bg);
+  scroll-padding-top: var(--nav-h);
 }
 
 body {
   margin: 0;
   background: var(--bg);
+  background-image:
+    radial-gradient(circle at 88% 0%, rgba(114, 200, 255, 0.1), transparent 38%),
+    radial-gradient(circle at 10% 4%, rgba(110, 210, 255, 0.1), transparent 38%);
   color: var(--ink);
   font-family: var(--font-body);
   overflow-x: hidden;
   position: relative;
-  padding-bottom: calc(var(--nav-h) + 16px);
+  padding-top: var(--nav-h);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grid blueprint: garis mayor tiap 160px, minor tiap 32px, memudar ke bawah */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(90, 110, 170, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 110, 170, 0.11) 1px, transparent 1px),
+    linear-gradient(rgba(90, 110, 170, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 110, 170, 0.055) 1px, transparent 1px);
+  background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse 120% 100% at 50% 0%, #000 35%, rgba(0, 0, 0, 0.4) 100%);
+  mask-image: radial-gradient(ellipse 120% 100% at 50% 0%, #000 35%, rgba(0, 0, 0, 0.4) 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -45,208 +80,268 @@ body {
   html { scroll-behavior: auto; }
 }
 
+img { max-width: 100%; }
+
 /* ====================================================================
-   BACKGROUND FOTO
-   Ganti url('background.jpg') di HTML (attribute style pada .bg-photo)
-   dengan foto kamu sendiri. Overlay biru transparan di atasnya biar teks
-   tetap kebaca di foto apapun.
+   UTILITAS
    ==================================================================== */
-.bg-photo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  height: 100svh; /* tinggi viewport yang STABIL, gak resize tiap address bar HP collapse/muncul — ini yang bikin background zoom patah-patah pas scroll */
-  z-index: 0;
-  background-color: var(--bg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-dim);
+  font-weight: 500;
+  margin: 0 0 0.9rem;
 }
 
-.bg-photo::after {
+.chip--ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink-dim);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--line);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+}
+
+.chip--ghost:first-child {
+  color: var(--accent);
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+.chip--ghost:first-child::before {
   content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.8) 60%, #fff 100%);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  animation: rec-pulse 1.6s ease-in-out infinite;
 }
+
+@keyframes rec-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.highlight {
+  display: inline-block;
+  color: var(--ink);
+  font-weight: 700;
+  padding: 0 0.05em 0.06em;
+  background: var(--holo) left bottom / 100% 3px no-repeat;
+}
+
+.highlight--sm { background-size: 100% 2px; font-weight: 700; }
+
+.scroll-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.6rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+.scroll-tag:hover { transform: translateY(-3px); background: var(--holo); color: var(--ink); box-shadow: var(--shadow-md); }
+.scroll-tag svg { width: 16px; height: 16px; }
 
 /* ====================================================================
-   LATAR SPLASH BIRU + HALFTONE
-   ==================================================================== */
-.blob-field {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  height: 100svh;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-}
-
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(65px) url(#liquid-distort);
-  will-change: transform;
-}
-
-.blob--deep {
-  width: 60vmax; height: 60vmax;
-  top: -22vmax; right: -20vmax;
-  background: radial-gradient(circle at 35% 35%, var(--blue), transparent 68%);
-  opacity: 0.5;
-  animation: drift-a 26s ease-in-out infinite;
-}
-
-.blob--mid {
-  width: 40vmax; height: 40vmax;
-  top: 10vh; left: -14vmax;
-  background: radial-gradient(circle at 50% 50%, var(--blue-mid), transparent 70%);
-  opacity: 0.35;
-  animation: drift-b 30s ease-in-out infinite;
-}
-
-@keyframes drift-a {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-5vw, 6vh) scale(1.08); }
-}
-@keyframes drift-b {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(6vw, -4vh) scale(1.06); }
-}
-
-.halftone {
-  position: absolute;
-  top: -5vh; right: -5vw;
-  width: 70vmax; height: 70vmax;
-  opacity: 0.16;
-  background-image: radial-gradient(var(--blue-deep) 1.4px, transparent 1.4px);
-  background-size: 14px 14px;
-  -webkit-mask-image: radial-gradient(circle at 60% 30%, black 0%, transparent 60%);
-  mask-image: radial-gradient(circle at 60% 30%, black 0%, transparent 60%);
-}
-
-/* ====================================================================
-   NAV — bottom tab bar (HP) / top floating pill (desktop)
+   NAV — toolbar tipis putih, tetap satu bentuk di HP & desktop
    ==================================================================== */
 .appnav {
   position: fixed;
-  left: 0; right: 0; bottom: 0;
-  z-index: 20;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
   height: var(--nav-h);
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  background: var(--surface-strong);
-  backdrop-filter: blur(9px) saturate(160%);
-  -webkit-backdrop-filter: blur(9px) saturate(160%);
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 -8px 30px var(--shadow);
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 5vw;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
 }
 
-/* Bulatan lensa yang ngikutin cursor — efek dock ala iOS/macOS.
-   Nggak muncul di HP karena di sana nggak ada cursor. */
+.appnav__brand {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.appnav__brand::before {
+  content: "";
+  width: 8px; height: 8px; border-radius: 2px;
+  background: var(--holo);
+  transform: rotate(45deg);
+}
+.appnav__brand span { color: var(--accent); }
+
+.appnav__items {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--line);
+  padding: 5px;
+  border-radius: 999px;
+}
+
+/* .nav-lens diposisikan relatif ke .appnav (JS menghitung dari navRect),
+   jadi .appnav__items sengaja tidak diberi position: relative */
 .nav-lens {
   position: absolute;
-  border-radius: 18px;
+  border-radius: 999px;
   pointer-events: none;
   z-index: 5;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px) saturate(160%);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
-    0 4px 14px rgba(20, 30, 90, 0.12);
+  background: var(--holo-soft);
+  border: 1px solid rgba(91, 169, 245, 0.45);
   transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1),
               top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
               width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
               height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (min-width: 820px) {
-  .nav-lens { border-radius: 999px; }
-}
-
 .appnav__item {
   position: relative;
   z-index: 6;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 3px;
+  gap: 6px;
   text-decoration: none;
   color: var(--ink-dim);
-  font-size: 0.68rem;
-  font-weight: 600;
-  transition: color 0.2s ease, transform 0.2s ease;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 9px 16px;
+  border-radius: 999px;
+  transition: color 0.25s ease;
+  white-space: nowrap;
 }
 
-.appnav__item svg { width: 22px; height: 22px; }
+.appnav__item:hover { color: var(--ink); }
+.appnav__item svg { width: 17px; height: 17px; flex-shrink: 0; }
+.appnav__item.is-active { color: var(--ink); }
 
-.appnav__item.is-active { color: var(--blue); transform: translateY(-2px); }
+.appnav__cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 1.15rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+}
+.appnav__cta:hover { background: var(--holo); color: var(--ink); transform: translateY(-2px); }
 
-@media (min-width: 820px) {
-  body { padding-bottom: 0; }
+/* Panel yang membungkus items + CTA. Di desktop cuma "transparan" secara layout
+   (display:contents) supaya .appnav__items & .appnav__cta tetap jadi flex child
+   langsung dari .appnav seperti semula. Di mobile panel ini yang berubah jadi
+   dropdown (lihat media query di bawah). */
+.appnav__panel { display: contents; }
 
-  .appnav {
-    position: fixed;
-    top: 20px; bottom: auto;
-    left: 50%; transform: translateX(-50%);
-    width: max-content;
-    height: auto;
-    gap: 6px;
-    padding: 8px;
-    border-radius: 999px;
-    border: 1px solid var(--blue-line);
-    box-shadow: 0 12px 40px var(--shadow);
+.appnav__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink);
+  cursor: pointer;
+}
+.appnav__toggle-icon {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.appnav__toggle-icon--close { opacity: 0; transform: rotate(-90deg) scale(0.7); }
+.appnav__toggle[aria-expanded="true"] .appnav__toggle-icon--open { opacity: 0; transform: rotate(90deg) scale(0.7); }
+.appnav__toggle[aria-expanded="true"] .appnav__toggle-icon--close { opacity: 1; transform: rotate(0) scale(1); }
+
+@media (max-width: 640px) {
+  .appnav { padding: 0 5vw; gap: 0.6rem; }
+  .appnav__brand { font-size: 0.92rem; }
+  .appnav__toggle { display: flex; }
+
+  .appnav__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 1rem 5vw 1.4rem;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
+  .appnav__panel.is-open { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
+  .nav-lens { display: none; }
+
+  .appnav__items {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    background: none;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+  }
   .appnav__item {
-    flex-direction: row;
-    padding: 10px 18px;
-    border-radius: 999px;
-    font-size: 0.85rem;
+    justify-content: flex-start;
+    padding: 11px 14px;
+    border-radius: var(--radius-md);
   }
+  .appnav__item span { display: inline; }
+  .appnav__item.is-active { background: var(--accent-soft); color: var(--accent); }
 
-  .appnav__item svg { width: 18px; height: 18px; }
-
-  .appnav__item.is-active { transform: none; }
+  .appnav__cta { width: 100%; justify-content: center; padding: 0.8rem 1rem; font-size: 0.85rem; }
 }
 
 /* ====================================================================
-   HERO
+   HERO — teks besar kiri, frame foto kanan. Di sinilah hologram
+   paling menonjol (judul + frame foto); sisanya dibuat tenang.
    ==================================================================== */
 .hero {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 3vh;
-  padding: 8vh 4vw 5vh;
-  max-width: 1680px;
+  padding: 7vh 5vw 6vh;
+  max-width: 1600px;
   margin: 0 auto;
-}
-
-.hero__intro {
-  min-height: 52vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.eyebrow {
-  font-size: 0.75rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--blue);
-  font-weight: 700;
-  margin: 0 0 1rem;
 }
 
 .hero__top {
@@ -256,384 +351,326 @@ body {
   margin-bottom: 6vh;
 }
 
-.chip--ghost {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--blue-deep);
-  background: var(--blue-pale);
-  border: 1px solid var(--blue-line);
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-}
-
 .hero__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 4rem;
-  align-items: start;
+  gap: 3rem;
+  align-items: center;
   text-align: center;
 }
 
 @media (min-width: 860px) {
-  .hero__grid {
-    grid-template-columns: 1.1fr 0.9fr;
-    text-align: left;
-  }
-  .hero__photo-wrap { margin-top: 2vh; }
+  .hero__grid { grid-template-columns: 1.25fr 0.75fr; text-align: left; }
 }
 
 .hero__name {
   font-family: var(--font-display);
-  font-weight: 800;
-  line-height: 1.05;
-  margin: 0 0 1rem;
+  font-weight: 500;
+  line-height: 0.96;
+  margin: 0 0 1.1rem;
   display: grid;
-  gap: 0.2rem;
+  gap: 0.35rem;
   text-align: left;
 }
 
 .hero__subtitle {
-  font-family: var(--font-display);
-  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-  font-weight: 700;
-  text-transform: none;
-  letter-spacing: 0.04em;
+  font-family: var(--font-mono);
+  font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  font-weight: 500;
+  color: var(--ink-dim);
 }
 
 .hero__title {
-  font-size: clamp(6rem, 14vw, 10rem);
-  line-height: 0.92;
-  letter-spacing: 0.05em;
-  color: var(--blue);
+  width: fit-content;
+  font-size: clamp(4.2rem, 11vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--ink);
   margin: 0;
+  /* ruang ekstra supaya ekor huruf "y" ikut terwarnai gradasi */
+  padding-bottom: 0.18em;
+  margin-bottom: -0.18em;
+}
+
+/* Kilau hologram pada judul: gradasi bergeser pelan bolak-balik */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero__title {
+    background-image: linear-gradient(105deg, #141b2d 0%, #2f5fd0 52%, #72c8ff 100%);
+    background-size: 220% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: holo-drift 12s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes holo-drift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
 }
 
 .hero__role {
-  font-family: var(--font-display);
-  font-size: clamp(1rem, 1.6vw, 1.15rem);
-  color: var(--blue);
-  margin: 0 0 1rem;
-}
-
-.highlight {
-  display: inline-block;
-  background: var(--blue-pale);
-  border: 1.5px solid var(--blue-line);
-  color: var(--blue);
-  border-radius: 14px;
-  padding: 0 0.3em;
-}
-
-.highlight--sm {
-  border-radius: 8px;
-  padding: 0 0.25em;
-  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  font-weight: 500;
+  color: var(--accent);
+  margin: 0 0 1.1rem;
 }
 
 .hero__tagline {
   font-size: clamp(1rem, 2vw, 1.15rem);
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--ink-dim);
   max-width: 42ch;
-  margin: 0 0 2.2rem;
+  margin: 0 0 2.4rem;
 }
 
-@media (min-width: 860px) {
-  .hero__text > * { margin-left: 0; margin-right: 0; }
-}
-
-.scroll-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.4rem;
-  border-radius: 999px;
-  background: var(--blue);
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.92rem;
-  box-shadow: 0 14px 30px var(--blue-line);
-  transition: transform 0.25s ease;
-}
-.scroll-tag:hover { transform: translateY(-2px); }
-.scroll-tag svg { width: 16px; height: 16px; }
-
-/* ---------- Foto hero ---------- */
+/* ---------- Frame foto hero (viewfinder) ---------- */
 .hero__photo-wrap {
   position: relative;
-  width: min(80%, 320px);
+  width: min(60%, 260px);
   margin: 0 auto;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
 }
 
-@media (min-width: 860px) { .hero__photo-wrap { width: min(100%, 340px); } }
-@media (min-width: 1300px) { .hero__photo-wrap { width: min(100%, 420px); } }
+@media (min-width: 860px) { .hero__photo-wrap { width: min(100%, 280px); margin: 0 0 0 auto; } }
 
 .hero__ring {
   position: absolute;
-  inset: -18px;
-  border: 1.5px dashed var(--blue-line);
-  border-radius: 50%;
-  animation: spin 26s linear infinite;
+  inset: -14px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: 14px;
+  animation: spin-slow 50s linear infinite;
 }
+.hero__ring::before,
+.hero__ring::after {
+  content: "";
+  position: absolute;
+  width: 16px; height: 16px;
+  border-top: 2px solid var(--accent);
+  border-left: 2px solid var(--accent);
+}
+.hero__ring::before { top: -2px; left: -2px; }
+.hero__ring::after { bottom: -2px; right: -2px; transform: rotate(180deg); }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin-slow { to { transform: rotate(360deg); } }
 
 .hero__photo {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(160deg, var(--blue-pale), #fff);
-  border: 1px solid var(--blue-line);
-  box-shadow: 0 20px 45px var(--shadow);
+  background: var(--bg-raise);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-lg);
   display: flex;
   align-items: center;
   justify-content: center;
+  filter: grayscale(0.15) contrast(1.05);
 }
 
-.hero__photo img {
+/* Lapisan kilau hologram tipis di atas foto */
+.hero__photo::after {
+  content: "";
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(114, 200, 255, 0.35), rgba(91, 169, 245, 0.25) 55%, rgba(47, 95, 208, 0.22));
+  mix-blend-mode: soft-light;
 }
 
-.hero__photo-placeholder {
-  width: 40%;
-  height: 40%;
-  color: var(--blue-mid);
-}
+.hero__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero__photo-placeholder { width: 34%; height: 34%; color: var(--line-strong); }
 
 .hero__badge {
   position: absolute;
-  right: -6%;
-  bottom: -6%;
-  width: 34%;
+  right: -10%;
+  bottom: -8%;
+  width: 40%;
   aspect-ratio: 1 / 1;
-  min-width: 76px;
+  min-width: 74px;
   border-radius: 50%;
-  background: var(--surface-strong);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--blue-line);
-  box-shadow: 0 10px 26px var(--shadow);
+  background: var(--holo-soft);
+  border: 4px solid #fff;
+  box-shadow: var(--shadow-md);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .hero__badge svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  color: var(--blue-deep);
-  animation: spin 18s linear infinite;
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  color: rgba(20, 27, 45, 0.6);
+  animation: spin-slow 24s linear infinite;
 }
-
-.hero__badge-core {
-  color: var(--blue);
-  font-size: 1.1rem;
-}
+.hero__badge-core { color: var(--ink); font-size: 1.05rem; }
 
 /* ====================================================================
-   SKILL & KEAHLIAN
+  SKILL & KEAHLIAN — panel putih tembus grid, kartu statis
    ==================================================================== */
 .skill {
   position: relative;
   z-index: 2;
-  width: 100%;
-  margin: 0;
-  padding: 4vh 0 0;
+  padding: 6vh 0;
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.skill__head {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 5vw;
+  text-align: center;
 }
 
 .skill__head h2 {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-weight: 500;
+  font-size: clamp(1.6rem, 3.6vw, 2.1rem);
+  letter-spacing: -0.02em;
   margin: 0 0 0.6rem;
+  color: var(--ink);
 }
 
-.skill__head p {
-  color: var(--ink-dim);
-  margin: 0 0 2.2rem;
-  line-height: 1.6;
+.skill__head p { color: var(--ink-dim); margin: 0; line-height: 1.6; }
+
+.skill__marquee {
+  margin-top: 2.6rem;
+  padding: 0 5vw;
 }
 
-.skill__list {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.7rem;
-}
-
-@media (max-width: 640px) {
-  .skill__list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.skill__track {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 850px;
+  margin: 0 auto;
 }
 
 .skill__card {
-  position: relative;
+  flex: 0 0 auto;
+  width: 118px;
   aspect-ratio: 1 / 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
-  padding: 0.5rem;
-  text-align: center;
-  overflow: hidden;
-  background: var(--surface);
-  backdrop-filter: blur(8px) saturate(150%);
-  -webkit-backdrop-filter: blur(8px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 16px 34px var(--shadow);
-  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+  gap: 0.45rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.skill__card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 22px 44px var(--shadow);
-  backdrop-filter: blur(6px) saturate(180%);
-  -webkit-backdrop-filter: blur(6px) saturate(180%);
-}
+.skill__card:hover { transform: translateY(-6px); border-color: var(--accent-line); box-shadow: var(--shadow-md); }
 
-.skill__card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 45%);
-  pointer-events: none;
-}
-
-.skill__card > * { position: relative; z-index: 1; }
-
-.skill__name {
-  font-size: 0.66rem;
-  font-weight: 600;
-  margin: 0;
-  line-height: 1.25;
-}
+.skill__name { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; margin: 0; color: var(--accent-deep); }
 
 .app-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 46px;
   flex-shrink: 0;
-  padding: 0;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  overflow: hidden;
+  overflow: visible;
 }
-
-.app-badge img {
-  width: 90%;
-  height: 90%;
-  object-fit: contain;
-  object-position: center;
-  display: block;
-  background: transparent;
-  padding: 0;
-  border-radius: 16px;
-}
+.app-badge img { width: 46px; height: 46px; object-fit: contain; object-position: center; display: block; border-radius: 12px; clip-path: inset(0 round 12px); }
+.app-badge img[src$="AlightMotion.webp"],
+.app-badge img[src$="IbisPaintX.webp"],
+.app-badge img[src$="Capcut.png"] { border-radius: 12px; clip-path: inset(0 round 12px); }
 
 /* ====================================================================
-   KARYA — satu section per kategori, isinya scroll horizontal
+   KARYA — kategori sebagai baris, kartu sebagai panel (fungsi tetap sama)
    ==================================================================== */
-#karya {
-  position: relative;
-  z-index: 2;
-  max-width: 1680px;
-  margin: 0 auto;
-  padding: 4vh 0 2vh;
-}
+#karya { position: relative; z-index: 2; max-width: 1600px; margin: 0 auto; padding: 6vh 0 2vh; }
 
-.karya__intro {
-  padding: 0 4vw 2vh;
-  max-width: 720px;
-}
+.karya__intro { padding: 0 5vw 3vh; max-width: 720px; }
 
 .karya__intro h2 {
   font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   font-size: clamp(1.8rem, 4vw, 2.4rem);
   margin: 0.4rem 0 0.7rem;
+  color: var(--ink);
 }
+.karya__intro p:last-child { color: var(--ink-dim); line-height: 1.6; margin: 0; }
 
-.karya__intro p:last-child {
-  color: var(--ink-dim);
-  line-height: 1.6;
-  margin: 0;
-}
+.category-row { padding: 3vh 5vw 4vh; border-top: 1px solid var(--line); }
 
-.category-row {
-  padding: 3vh 4vw 4vh;
-}
-
-.category-row__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.2rem;
-  padding-bottom: 0.9rem;
-  border-bottom: 1.5px solid var(--blue-line);
-}
+.category-row__head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.4rem; }
 
 .category-row__head h2 {
   font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   font-size: clamp(1.5rem, 3.4vw, 2.1rem);
   margin: 0;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.category-row__head h2::before {
+  content: "";
+  width: 9px; height: 9px; border-radius: 2px;
+  background: var(--holo);
+  transform: rotate(45deg);
 }
 
 .category-row__count {
-  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 500;
   color: var(--ink-dim);
   margin: 0;
   white-space: nowrap;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
 }
 
-.store-group + .store-group {
-  margin-top: 1rem;
-}
+.store-group--hidden, .store-group--design-hidden { display: none; }
+.store-group + .store-group { margin-top: 1.2rem; }
 
 .store-group__title {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--ink);
-  margin: 0 0 0.2rem;
-  padding-left: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-dim);
+  margin: 0 0 0.3rem;
+  padding-left: 14px;
+  position: relative;
+}
+.store-group__title::before {
+  content: "";
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 8px; height: 1.5px; background: var(--line-strong);
 }
 
 .scroll-row {
   display: flex;
   align-items: stretch;
-  gap: 1.1rem;
+  gap: 1.2rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 22px 24px 48px;
-  scroll-padding-left: 4vw;
+  padding: 18px 4px 44px;
+  scroll-padding-left: 5vw;
 }
 
 .scroll-row::-webkit-scrollbar { height: 6px; }
-.scroll-row::-webkit-scrollbar-thumb {
-  background: var(--blue-line);
-  border-radius: 999px;
-}
+.scroll-row::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; }
 
-/* ---------- Kartu karya ----------
-   Tinggi kartu DIBIKIN SAMA untuk semua (--media-h), lebarnya otomatis
-   menyesuaikan aspect-ratio masing-masing (diatur inline per kartu di HTML).
-   Hasilnya: kartu landscape jadi lebih lebar, kartu portrait jadi lebih
-   ramping — tapi semua tetap sejajar/rata tingginya. */
 :root { --media-h: clamp(200px, 34vw, 300px); }
 
 .card {
@@ -645,33 +682,32 @@ body {
   width: min-content;
   max-width: none;
   overflow: hidden;
-  background: var(--surface);
-  backdrop-filter: blur(8px) saturate(150%);
-  -webkit-backdrop-filter: blur(8px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 0.6rem;
-  box-shadow: 0 16px 15px var(--shadow);
-  transition: transform 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+  box-shadow: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 10px 15px var(--shadow);
-  backdrop-filter: blur(6px) saturate(180%);
-  -webkit-backdrop-filter: blur(6px) saturate(180%);
-}
-
-.card::before {
+/* Border hologram: muncul halus saat kartu di-hover */
+.card::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 3;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 45%);
+  padding: 1px;
+  background: linear-gradient(135deg, #9bdcff, #5ba9f5 55%, #2f5fd0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
+.card:hover { transform: translateY(-6px); border-color: transparent; box-shadow: var(--shadow-md); }
 .card:hover::after { opacity: 1; }
 
 .card__media {
@@ -681,706 +717,320 @@ body {
   max-width: none;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--blue-pale);
+  background: var(--bg-raise);
   isolation: isolate;
   transform: translateZ(0);
-  /* aspect-ratio diatur langsung lewat inline style per kartu di HTML —
-     itu yang menentukan lebar akhir kartu (tinggi selalu sama). */
+}
+
+/* penanda tipe klip: gambar vs video, murni dekoratif (tidak mengubah data) */
+.scroll-row[data-type="video"] .card__media::before {
+  content: "";
+  position: absolute; z-index: 3; top: 9px; left: 9px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.75);
+  animation: rec-pulse 1.6s ease-in-out infinite;
+}
+.scroll-row[data-type="image"] .card__media::before {
+  content: "";
+  position: absolute; z-index: 3; top: 9px; left: 9px;
+  width: 8px; height: 8px; border-radius: 2px;
+  background: #fff;
+  border: 1.5px solid var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.75);
 }
 
 .card__media iframe {
-  position: absolute; /* Kunci utamanya: keluarkan dari flow agar tidak merusak lebar kartu */
-  top: 0;
-  left: 0;
-  width: 300%;
-  height: 300%;
-  border: 0;
-  display: block;
+  position: absolute; top: 0; left: 0;
+  width: 300%; height: 300%;
+  border: 0; display: block;
   transform: scale(0.3333) translateZ(0);
   transform-origin: top left;
 }
 
-/* Trik skala untuk iframe Drive pada video vertikal (9:16) agar UI tidak berantakan */
 .card__media.is-portrait iframe {
-  position: absolute; /* Kunci utamanya: keluarkan dari flow agar tidak merusak lebar kartu */
-  top: -20;
-  left: -20;
-  width: 300%;
-  height: 300%;
+  position: absolute; top: -20; left: -20;
+  width: 300%; height: 300%;
   transform: scale(0.333333) translateZ(0);
   transform-origin: top left;
 }
 
-.card__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+.card__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* Embed YouTube sudah bersih dari awal (nggak ada tombol/UI nyempil kayak
-   Drive), jadi nggak perlu trik zoom 300% di atas — cukup isi penuh kotaknya. */
 .card__media.is-youtube iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: none;
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: none;
 }
 
-/* Video Cloudinary (tag <video> asli) — sama seperti YouTube, langsung
-   isi penuh kotaknya tanpa trik zoom, karena bukan iframe cross-origin. */
-.card__media video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  background: #05060a;
-}
+.card__media video { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; background: #050505; }
 
-/* Fallback: kalau ada browser yang tetap fullscreen-in videonya langsung
-   (bukan kotak kartunya), minimal object-fit-nya udah benar juga di sini. */
 .card__media video:fullscreen,
 .card__media video:-webkit-full-screen,
-.card__media video:-moz-full-screen {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: #000;
-}
+.card__media video:-moz-full-screen { width: 100%; height: 100%; object-fit: contain; background: #000; }
 
-/* Tombol fullscreen bawaan browser suka nggak konsisten — sebagian
-   device/browser nge-render fullscreen video pakai mekanisme native
-   sendiri yang ngelewatin CSS kita sepenuhnya, hasilnya videonya kepotong
-   walau object-fit udah diatur. Makanya kita sembunyikan tombol fullscreen
-   bawaan lalu ganti pakai tombol custom kita sendiri (lihat script) yang
-   men-fullscreen-kan KOTAK KARTUNYA — dengan cara ini letterbox/contain-nya
-   dijamin kepakai, karena kotaknya cuma <div> biasa yang kita kontrol
-   penuh lewat CSS, bukan native fullscreen video device. */
-.card__media video::-webkit-media-controls-fullscreen-button {
-  display: none !important;
-}
+.card__media video::-webkit-media-controls-fullscreen-button { display: none !important; }
 
 .media-fullscreen-btn {
-  position: absolute;
-  z-index: 10;
-  top: 8px;
-  right: 8px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
-  cursor: pointer;
-  opacity: 0.85;
-  transition: opacity 0.2s ease, background 0.2s ease;
+  position: absolute; z-index: 10; top: 8px; right: 8px;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink); cursor: pointer; opacity: 0.92;
+  transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
-
-.media-fullscreen-btn:hover,
-.media-fullscreen-btn:focus-visible {
-  opacity: 1;
-  background: rgba(0, 0, 0, 0.75);
-}
-
+.media-fullscreen-btn:hover, .media-fullscreen-btn:focus-visible { opacity: 1; background: #fff; color: var(--accent); }
 .media-fullscreen-btn svg { width: 16px; height: 16px; }
 
-/* Pas KOTAK kartu (bukan video-nya langsung) yang lagi fullscreen: video
-   ditaruh di tengah dengan ukuran "contain" (utuh, nggak kepotong), sisa
-   ruangnya dikasih background hitam (letterbox) — dan ini dijamin
-   konsisten di semua browser karena elemen yang di-fullscreen-kan cuma
-   <div> polos, bukan video native. */
 .card__media.is-native-video:fullscreen,
 .card__media.is-native-video:-webkit-full-screen,
 .card__media.is-native-video:-moz-full-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  max-width: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  border-radius: 0;
+  position: fixed; inset: 0; width: 100vw; height: 100vh; max-width: none;
+  width: 100dvw; height: 100dvh;
+  aspect-ratio: auto;
+  display: flex; align-items: center; justify-content: center;
+  background: #000; border-radius: 0;
 }
 
 .card__media.is-native-video:fullscreen video,
 .card__media.is-native-video:-webkit-full-screen video,
 .card__media.is-native-video:-moz-full-screen video {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  background: transparent;
+  width: 100%; height: 100%; max-width: none; max-height: none;
+  object-fit: contain; object-position: center; background: transparent;
 }
-
-/* Penutup kosmetik tombol "buka di Drive" yang muncul di pojok kanan atas
-   preview video Drive. Ini cuma akal-akalan visual (nutup, bukan menghapus
-   beneran) karena kontennya cross-origin — lihat catatan di index.html. */
 
 .card__body {
   display: block;
   flex-grow: 1;
-  margin-top: 0.5rem;
-  padding: 0.7rem 0.7rem 0.6rem;
+  margin-top: 0.6rem;
+  padding: 0.7rem 0.6rem 0.5rem;
   border-radius: calc(var(--radius-md) - 6px);
-  background: rgba(255, 255, 255, 0.5);
+  background: transparent;
   color: var(--ink);
   width: 100%;
   overflow-wrap: break-word;
 }
 
-.card__body h3 {
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin: 0 0 0.2rem;
-  line-height: 1.3;
+.card__body h3 { font-size: 0.95rem; font-weight: 600; margin: 0 0 0.2rem; line-height: 1.3; color: var(--ink); }
+.card__body p { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ink-dim); margin: 0; }
+
+/* ====================================================================
+   FOLDER DESIGN + MODAL (fungsi & perilaku tetap sama, tampilan diubah)
+   ==================================================================== */
+.folder-row--design { display: flex; flex-wrap: wrap; gap: 1.4rem; padding: 0.4rem 0 1.6rem; }
+
+.folder--design {
+  display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+  width: 190px; padding: 0; border: none; border-radius: var(--radius-md);
+  background: transparent; box-shadow: none; color: var(--ink); cursor: pointer;
+  font-family: var(--font-body); transition: transform 0.3s ease;
+}
+.folder--design:hover, .folder--design:focus-visible { transform: translateY(-7px); outline: none; }
+
+.folder__icon--design {
+  position: relative; width: 190px; height: 140px; overflow: hidden; isolation: isolate;
+  border-radius: var(--radius-md); background: var(--bg-soft); border: 1px solid var(--line);
+  box-shadow: none; transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.folder__icon--design::after {
+  content: "";
+  position: absolute; top: 0; left: 14px; width: 46px; height: 8px;
+  background: var(--bg-soft); border: 1px solid var(--line); border-bottom: none;
+  border-radius: 4px 4px 0 0; z-index: 1;
+}
+.folder--design:hover .folder__icon--design,
+.folder--design:focus-visible .folder__icon--design { border-color: var(--accent-line); box-shadow: var(--shadow-md); }
+
+.folder__preview { position: absolute; inset: 12px 12px 30px; z-index: 0; overflow: hidden; border-radius: 8px; }
+
+.folder__preview-image {
+  position: absolute; width: 66%; height: 92%; object-fit: cover; object-position: center;
+  border: 4px solid #fff; border-radius: 8px; background: var(--bg-raise); box-shadow: var(--shadow-sm);
+}
+.folder__preview-image--1 { left: 0; top: 5%; transform: rotate(-12deg); }
+.folder__preview-image--2 { left: 17%; top: -4%; transform: rotate(-1deg); }
+.folder__preview-image--3 { right: -2%; top: 6%; transform: rotate(12deg); }
+
+.folder__glass-front {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; height: 52%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0), #fff 70%);
 }
 
-.card__body p {
-  font-size: 0.8rem;
-  color: var(--ink-dim);
-  margin: 0;
+.folder__arrow {
+  position: absolute; right: 10px; bottom: 10px; z-index: 4;
+  display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+  color: #fff; background: var(--ink); box-shadow: var(--shadow-sm);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.folder--design:hover .folder__arrow,
+.folder--design:focus-visible .folder__arrow { background: var(--holo); color: var(--ink); }
+.folder__arrow svg { width: 19px; height: 19px; }
+
+.folder--design .folder__label { max-width: 190px; font-size: 0.88rem; font-weight: 600; line-height: 1.25; text-align: center; color: var(--ink); }
+.folder--design .folder__count { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-dim); }
+
+.folder-modal {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 4vh 4vw; background: rgba(232, 238, 248, 0.72);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+}
+.folder-modal.is-open { opacity: 1; pointer-events: auto; }
+
+.folder-modal__panel {
+  position: relative; width: min(1100px, 100%); max-height: 88vh;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--bg-soft); border: 1px solid var(--line-strong); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(16px) scale(0.98); transition: transform 0.3s ease;
+}
+.folder-modal.is-open .folder-modal__panel { transform: translateY(0) scale(1); }
+
+.folder-modal__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--line); flex: 0 0 auto;
+}
+.folder-modal__title { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.02em; font-size: clamp(1.1rem, 2.6vw, 1.5rem); margin: 0; color: var(--ink); }
+
+.folder-modal__close {
+  flex: 0 0 auto; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%;
+  background: var(--bg-raise); color: var(--ink-dim); font-size: 1.3rem; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.folder-modal__close:hover, .folder-modal__close:focus-visible { background: var(--accent-soft); color: var(--accent); transform: rotate(90deg); }
+
+.folder-modal__grid {
+  flex: 1 1 auto; overflow-y: auto; padding: 1.5rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; align-items: start;
+}
+.folder-modal__grid .card { width: 100%; max-width: 100%; }
+.folder-modal__grid .card__media { width: 100%; height: auto; }
+
+/* Hover-transform hanya untuk perangkat yang benar-benar punya hover (mouse).
+   Di layar sentuh, transform ini bisa "nyangkut" habis tap dan bikin kartu
+   kelihatan geser/numpuk ke kartu berikutnya — jadi dimatikan total di sini. */
+@media (hover: none) {
+  .card:hover { transform: none; border-color: var(--line); box-shadow: none; }
+  .card:hover::after { opacity: 0; }
+  .folder--design:hover, .folder--design:focus-visible { transform: none; }
+}
+
+@media (max-width: 819px) {
+  .folder-row--design { gap: 0.9rem; }
+  .folder--design { width: 164px; }
+  .folder__icon--design { width: 164px; height: 122px; }
+  .folder__arrow { right: 8px; bottom: 8px; width: 34px; height: 34px; }
+  .folder__arrow svg { width: 17px; height: 17px; }
+  .folder--design .folder__label { max-width: 164px; font-size: 0.78rem; }
+  .folder-modal { padding: 0; }
+  .folder-modal__panel { width: 100%; height: 100%; max-height: 100%; border-radius: 0; }
+
+  /* Ganti dari CSS grid ke flex column: satu kartu penuh per baris, jarak
+     antar kartu dijamin oleh gap, tidak bergantung pada auto row-sizing grid
+     yang sebelumnya bikin kartu-kartu kelihatan bertumpukan. */
+  .folder-modal__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+  .folder-modal__grid .card { width: 100%; flex: 0 0 auto; }
 }
 
 /* ====================================================================
-   FOOTER / KONTAK
+   FOOTER / KONTAK — panel kaca putih dengan grid mini + kilau hologram
    ==================================================================== */
 .glasscard {
-  position: relative;
-  overflow: hidden;
-  background: var(--surface);
-  backdrop-filter: blur(10px) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  position: relative; overflow: hidden;
+  background: linear-gradient(155deg, #ffffff, #f3f7fd 75%);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-lg);
-  box-shadow: 0 16px 34px var(--shadow);
+  box-shadow: var(--shadow-md);
 }
-
 .glasscard::before {
   content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 50%);
+  position: absolute; inset: -40% -10% auto auto; width: 60%; height: 140%;
+  background: radial-gradient(circle, rgba(91, 169, 245, 0.2), rgba(120, 210, 255, 0.12) 40%, transparent 68%);
+  pointer-events: none;
+}
+.glasscard::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(90, 110, 170, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90, 110, 170, 0.09) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: linear-gradient(120deg, transparent 35%, #000 100%);
+  mask-image: linear-gradient(120deg, transparent 35%, #000 100%);
   pointer-events: none;
 }
 
-.glasscard > * { position: relative; z-index: 1; }
-
-.footer {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 4vh 6vw 3rem;
-  max-width: 1100px;
-  margin: 0 auto;
-}
+.footer { position: relative; z-index: 2; padding: 6vh 5vw 3.5rem; max-width: 1300px; margin: 0 auto; }
 
 .footer__banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.4rem;
+  flex-wrap: wrap;
   padding: clamp(2.2rem, 5vw, 3.4rem);
-  margin-bottom: 2.4rem;
+  text-align: left;
 }
+
+.footer__banner-text { flex: 1 1 320px; position: relative; z-index: 1; }
 
 .footer__banner h2 {
   font-family: var(--font-display);
-  font-size: clamp(1.7rem, 4vw, 2.3rem);
-  margin: 0 0 0.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: clamp(1.6rem, 3.6vw, 2.3rem);
+  margin: 0 0 0.6rem;
+  color: var(--ink);
 }
+.footer__banner h2 .highlight { color: var(--ink); }
 
-.footer__banner p {
-  color: var(--ink-dim);
-  line-height: 1.6;
-  margin: 0 auto 1.6rem;
-  max-width: 46ch;
-}
+.footer__banner p { font-family: var(--font-mono); font-size: 0.85rem; color: var(--ink-dim); line-height: 1.6; margin: 0; }
 
-.footer__handle {
-  font-family: var(--font-display);
-  font-weight: 600;
-  color: var(--blue);
-  margin: 0 0 0.4rem;
+.footer__banner-action { display: flex; flex-direction: column; align-items: flex-start; gap: 0.9rem; flex: 0 0 auto; position: relative; z-index: 1; }
+
+.footer__handle { font-family: var(--font-mono); font-weight: 500; color: var(--ink-dim); margin: 0; }
+
+@media (max-width: 640px) {
+  .footer__banner { text-align: center; justify-content: center; }
+  .footer__banner-action { align-items: center; width: 100%; }
 }
 
 /* ====================================================================
-   FOCUS STATE (AKSESIBILITAS)
+   FOCUS STATE
    ==================================================================== */
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 3px;
-}
-/* ====================================================================
-   MOBILE LAYOUT (≤ 819px) — Foto atas → Nama center → Skill kecil
-   Desktop tetap sama seperti biasa.
-
-   Catatan: blok ini adalah hasil rapikan dari beberapa iterasi "FIX v2–v8"
-   yang tadinya numpuk di file ini (semuanya nimpa selector yang sama pakai
-   !important). Sudah disatukan jadi satu aturan final per elemen — hasil
-   tampilannya sama persis, cuma filenya jauh lebih ringan & gampang diedit.
-   ==================================================================== */
-
-@media (max-width: 819px) {
-
-  /* ── HERO ── */
-  .hero {
-    padding: 3.5vh 5vw 3vh;
-    gap: 0;
-  }
-
-  .hero__intro {
-    padding-top: 2vh;
-  }
-
-  .hero__top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: 0;
-    margin-bottom: 2.5rem;
-    padding-top: 0;
-  }
-
-  .chip--ghost {
-    font-size: 0.6rem;
-    padding: 0.28rem 0.6rem;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-  }
-
-  .hero__grid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    text-align: center;
-  }
-
-  /* ── FOTO: tampil pertama, kecil, bulat, center ── */
-  .hero__photo-wrap {
-    order: -1;
-    position: relative;
-    width: 130px;
-    height: 130px;
-    min-width: 130px;
-    max-width: 130px;
-    min-height: 130px;
-    max-height: 130px;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    margin: 0 auto 1.5rem;
-    flex-shrink: 0;
-    align-self: center;
-  }
-
-  .hero__ring {
-    position: absolute;
-    top: -14px;
-    left: -14px;
-    right: -14px;
-    bottom: -14px;
-    width: auto;
-    height: auto;
-    aspect-ratio: unset;
-    border-radius: 50%;
-  }
-
-  .hero__photo {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-  }
-
-  /* Badge "OPEN FOR PROJECTS": teks melingkar disembunyikan di HP (kekecilan
-     jadi gepeng), diganti tampilan minimalis bintang + ring tipis */
-  .hero__badge {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    max-width: 48px;
-    min-height: 48px;
-    max-height: 48px;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    right: -8px;
-    bottom: -8px;
-    overflow: visible;
-    flex-shrink: 0;
-  }
-
-  .hero__badge svg {
-    display: none;
-  }
-
-  .hero__badge-core {
-    position: relative;
-    z-index: 2;
-    font-size: 1.1rem;
-    line-height: 1;
-  }
-
-  .hero__badge::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 1.5px dashed var(--blue-line);
-    animation: spin 14s linear infinite;
-  }
-
-  /* ── TEKS HERO: semua center ── */
-  .hero__text {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .hero__name {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .hero__subtitle {
-    font-size: clamp(0.85rem, 3.5vw, 1rem);
-    text-align: center;
-  }
-
-  .hero__title {
-    font-size: clamp(3.5rem, 18vw, 5.5rem);
-    line-height: 0.95;
-    text-align: center;
-    letter-spacing: 0.02em;
-  }
-
-  .hero__role {
-    font-size: clamp(0.8rem, 3.2vw, 0.95rem);
-    text-align: center;
-    margin-bottom: 0.75rem;
-  }
-
-  .hero__tagline {
-    font-size: clamp(0.85rem, 3.4vw, 0.95rem);
-    line-height: 1.65;
-    text-align: center;
-    max-width: 36ch;
-    margin: 0 auto 1.4rem;
-  }
-
-  .eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.15em;
-    margin-bottom: 0.5rem;
-    text-align: center;
-  }
-
-  .scroll-tag {
-    font-size: 0.85rem;
-    padding: 0.65rem 1.3rem;
-    margin: 0 auto 2rem;
-  }
-
-  /* ── SKILL SECTION ── */
-  .skill {
-    width: 100%;
-    padding: 0;
-    margin-top: 0;
-  }
-
-  .skill__head {
-    text-align: center;
-    margin-bottom: 1.2rem;
-  }
-
-  .skill__head h2 {
-    font-size: clamp(1.2rem, 5.5vw, 1.5rem);
-    margin-bottom: 0.35rem;
-  }
-
-  .skill__head p {
-    font-size: 0.82rem;
-    line-height: 1.5;
-    max-width: 32ch;
-    margin: 0 auto 1rem;
-  }
-
-  .skill__list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-
-  .skill__card {
-    border-radius: 16px;
-    padding: 0.55rem 0.25rem 0.6rem;
-    gap: 0.2rem;
-    aspect-ratio: 1 / 1;
-  }
-
-  .app-badge {
-    width: 36px;
-    height: 36px;
-  }
-
-  .app-badge img {
-    border-radius: 10px;
-    width: 85%;
-    height: 85%;
-  }
-
-  .skill__name {
-    font-size: 0.55rem;
-    line-height: 1.2;
-    font-weight: 600;
-  }
-
-  /* ── KARYA SECTION ── */
-  #karya {
-    padding: 3vh 0 2vh;
-  }
-
-  .karya__intro {
-    padding: 0 5vw 1.5vh;
-    text-align: center;
-  }
-
-  .karya__intro h2 {
-    font-size: clamp(1.3rem, 5.5vw, 1.6rem);
-  }
-
-  .karya__intro p {
-    font-size: 0.85rem;
-  }
-
-  .category-row {
-    padding: 2vh 5vw 3vh;
-  }
-
-  .category-row__head h2 {
-    font-size: clamp(1.1rem, 4.5vw, 1.4rem);
-  }
-
-  .scroll-row {
-    padding: 14px 5vw 32px;
-    gap: 0.8rem;
-  }
-
-  :root {
-    --media-h: clamp(340px, 55vw, 480px);
-  }
-
-  /* Motion Graphic pakai video (16/9 & 9/16) — bikin lebih kecil daripada
-     Design biar gak kegedean di layar HP. Cuma berlaku di section ini. */
-  .category-row[aria-label="Kategori Motion Graphic"] {
-    --media-h: clamp(220px, 55vw, 300px);
-  }
- 
-  .scroll-row {
-    padding: 14px 8vw 32px 5vw;
-    gap: 1rem;
-    scroll-padding-left: 5vw;
-  }
-
-  .card {
-    max-width: none;
-    padding: 0.6rem;
-    border-radius: 24px;
-  }
-
-  .card__body {
-    padding: 0.7rem 0.7rem 0.6rem;
-  }
-
-  .card__body h3 { font-size: 1rem; }
-  .card__body p  { font-size: 0.82rem; }
-
-  /* ── FOOTER ── */
-  .footer {
-    padding: 3vh 5vw 2.5rem;
-    text-align: center;
-  }
-
-  .footer__banner {
-    padding: 1.5rem;
-    margin-bottom: 1.4rem;
-  }
-
-  .footer__banner h2 {
-    font-size: clamp(1.2rem, 5vw, 1.5rem);
-  }
-
-  .footer__banner p { font-size: 0.85rem; }
-
-  /* ── NAV: pill ngambang di bawah, dengan jarak aman biar gak numpuk
-     sama konten di atasnya ── */
-  body {
-    padding-bottom: 5.5rem;
-  }
-
-  .appnav {
-    position: fixed;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    bottom: 1rem;
-    width: max-content;
-    min-width: unset;
-    max-width: 260px;
-    height: auto;
-    padding: 0.35rem 0.5rem;
-    gap: 0;
-    overflow: visible;
-    align-items: center;
-    justify-content: space-around;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.55);
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(18px) saturate(180%);
-    -webkit-backdrop-filter: blur(18px) saturate(180%);
-    box-shadow:
-      0 8px 32px rgba(20, 30, 90, 0.18),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  }
-
-  .appnav__item {
-    position: relative;
-    z-index: 6;
-    flex-direction: column;
-    align-self: center;
-    text-align: center;
-    gap: 2px;
-    padding: 0.45rem 1rem;
-    min-width: 60px;
-    border-radius: 999px;
-    font-size: 0.6rem;
-  }
-
-  .appnav__item svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .appnav__item.is-active {
-    color: var(--blue);
-    transform: none;
-  }
-
-  .appnav__item:not(.is-active) {
-    color: var(--ink-dim);
-  }
-
-  /* Pill indicator ("lensa") yang slide mengikuti tab aktif — posisi &
-     ukurannya diatur lewat JS (moveNavLens), CSS cuma urus tampilan kaca */
-  .nav-lens {
-    display: block;
-    position: absolute;
-    z-index: 5;
-    pointer-events: none;
-    margin: 2px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px) saturate(160%);
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 1),
-      0 2px 10px rgba(20, 30, 90, 0.1);
-    transition:
-      left   0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      top    0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      width  0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      height 0.32s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-}
-
-/* Safe-area iPhone (notch/home-indicator) */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  @media (max-width: 819px) {
-    body {
-      padding-bottom: calc(5rem + env(safe-area-inset-bottom));
-    }
-    .appnav {
-      bottom: calc(0.85rem + env(safe-area-inset-bottom));
-    }
-  }
-}
-
-/* HP sangat kecil (< 380px) */
-@media (max-width: 380px) {
-  .hero__title { font-size: clamp(3rem, 17vw, 4rem); }
-
-  .hero__photo-wrap {
-    width: 110px;
-    height: 110px;
-    min-width: 110px;
-    max-width: 110px;
-    min-height: 110px;
-    max-height: 110px;
-  }
-
-  .hero__badge {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    max-width: 40px;
-    min-height: 40px;
-    max-height: 40px;
-    right: -6px;
-    bottom: -6px;
-  }
-
-  .app-badge { width: 30px; height: 30px; }
-  .skill__name { font-size: 0.5rem; }
-  .skill__card { border-radius: 14px; }
-}
+a:focus-visible, button:focus-visible, :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ====================================================================
-   PERFORMA MOBILE — kurangi beban render pas scroll di HP.
-   backdrop-filter (blur kaca) itu properti paling mahal buat GPU HP kalau
-   dipasang di banyak elemen sekaligus (kartu skill & karya) — tiap kartu
-   kelihatan di layar, browser harus blur ulang apa yang ada di belakangnya
-   tiap frame. Di HP kita lepas blur-nya (background tetap semi-transparan
-   biar look "glass"-nya kerasa, cuma gak nge-blur background di belakangnya
-   secara real-time). Desktop tetap pakai efek penuh.
+   MOBILE LAYOUT (≤ 819px)
    ==================================================================== */
 @media (max-width: 819px) {
-  .card,
-  .skill__card {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: rgba(255, 255, 255, 0.55);
-    transition: transform 0.35s ease, box-shadow 0.35s ease;
-  }
+  .hero { padding: 5vh 6vw 4vh; }
 
-  .card:hover,
-  .skill__card:hover {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
+  .hero__top { margin-bottom: 2.6rem; }
 
-  /* Animasi liquid-distort di background jalan terus-menerus walau lagi
-     di-scroll — di HP kita sederhanakan jadi blur polos tanpa distorsi
-     SVG, biar gak rebutan render sama scroll. Splash birunya tetap ada. */
-  .blob {
-    filter: blur(65px);
-  }
+  .chip--ghost { font-size: 0.6rem; padding: 0.32rem 0.7rem; }
+
+  .hero__grid { display: flex; flex-direction: column; align-items: center; gap: 2rem; text-align: center; }
+
+  .hero__photo-wrap { order: -1; width: 200px; aspect-ratio: 1 / 1; margin: 0 auto; }
+  .hero__photo { border-radius: 50%; }
+  .hero__ring { border-radius: 50%; inset: -12px; }
+
+  .hero__name, .hero__role, .hero__tagline { text-align: center; }
+  .hero__name { justify-items: center; }
+
+  .hero__badge { width: 46px; height: 46px; min-width: 46px; right: -4px; bottom: -4px; }
+  .hero__badge svg { display: none; }
+
+  .hero__title { font-size: clamp(3.2rem, 15vw, 4.4rem); }
+
+  .category-row { padding: 2.6vh 6vw 3vh; }
+
+  /* performa scroll di HP: kurangi blur */
+  .skill { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(255, 255, 255, 0.85); }
 }
