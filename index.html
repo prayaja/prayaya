@@ -1052,9 +1052,29 @@
       let isOpen = false;
       let activeGroup = null;
 
+      function setProjectTitle(element, title) {
+        const fakeProjectText = "(Fake Project)";
+        const suffixIndex = title.indexOf(fakeProjectText);
+        if (suffixIndex === -1) {
+          element.textContent = title;
+          return;
+        }
+
+        const fakeProjectLabel = document.createElement("span");
+        fakeProjectLabel.className = "fake-project-label";
+        fakeProjectLabel.textContent = fakeProjectText;
+        element.replaceChildren(
+          document.createTextNode(title.slice(0, suffixIndex)),
+          fakeProjectLabel,
+          document.createTextNode(title.slice(suffixIndex + fakeProjectText.length))
+        );
+      }
+
       function openFolder(group, scrollRow) {
-        modalTitle.textContent =
-          group.querySelector(".store-group__title")?.textContent || "Design";
+        setProjectTitle(
+          modalTitle,
+          group.querySelector(".store-group__title")?.textContent || "Design"
+        );
         modal.classList.toggle(
           "is-gif-folder",
           group.closest('.category-row[aria-label="Kategori GIF"]') !== null
@@ -1115,8 +1135,10 @@
             <span class="folder__count"></span>
           `;
 
-          folder.querySelector(".folder__label").textContent =
-            group.querySelector(".store-group__title")?.textContent || "Design";
+          setProjectTitle(
+            folder.querySelector(".folder__label"),
+            group.querySelector(".store-group__title")?.textContent || "Design"
+          );
           folder.querySelector(".folder__count").textContent =
             `${group.querySelectorAll(".card").length} karya`;
 

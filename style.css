@@ -867,6 +867,7 @@ img { max-width: 100%; }
 
 .folder--design .folder__label { max-width: 190px; font-size: 0.88rem; font-weight: 600; line-height: 1.25; text-align: center; color: var(--ink); }
 .folder--design .folder__count { font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-dim); }
+.fake-project-label { color: #c62828; }
 
 .folder-modal {
   position: fixed; inset: 0; z-index: 200;
